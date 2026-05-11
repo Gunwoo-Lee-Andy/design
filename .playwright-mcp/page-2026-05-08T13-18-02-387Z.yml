@@ -1,0 +1,264 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e5]: 01 / 18
+    - generic [ref=e6]:
+      - generic [ref=e7]: INVESTMENT PITCH DECK
+      - heading "사람의 디지털 자산을 보관하고 재사용하게 만드는 회사" [level=1] [ref=e8]:
+        - text: 사람의 디지털 자산을 보관하고
+        - text: 재사용하게 만드는 회사
+      - paragraph [ref=e9]:
+        - text: MyMiniMe Studio는 현실의 기억을 피규어로 남기고,
+        - text: 이를 3D 디지털 트윈으로 전환해 영구적인 가치를 창출합니다.
+    - generic: SCROLL DOWN ↓
+  - generic [ref=e10]:
+    - generic [ref=e13]: 02 / 18
+    - generic [ref=e14]:
+      - generic [ref=e15]: INVESTMENT THESIS
+      - heading "우리는 \"사진 다음의 기억 방식\"을 만듭니다" [level=2] [ref=e16]:
+        - text: 우리는 "사진 다음의
+        - text: 기억 방식"을 만듭니다
+      - paragraph [ref=e17]:
+        - text: 사람들은 피규어를 사는 것이 아니라, 다시 꺼내볼 수 있는
+        - strong [ref=e18]: 지금의 나와 관계
+        - text: 를 삽니다.
+        - text: 하지만 기존 3D 데이터는 "한 번 만들고 한 번 쓰고 끝"이라는 한계가 있었습니다.
+      - generic [ref=e19]:
+        - heading "MyMiniMe의 구조적 피벗" [level=3] [ref=e20]
+        - paragraph [ref=e21]:
+          - text: 단발성 제조 방식에서 벗어나, 감정적 연결고리를 기반으로
+          - text: 데이터 생성 및 재사용 생태계로 패러다임을 전환합니다.
+  - generic [ref=e22]:
+    - generic [ref=e25]: 03 / 18
+    - generic [ref=e26]:
+      - generic [ref=e27]: EMPATHIZE
+      - heading "\"우리 아이가 제일 예쁠 때, 만질 수 있게 남길 수 없을까?\"" [level=2] [ref=e28]:
+        - text: "\"우리 아이가 제일 예쁠 때,"
+        - text: 만질 수 있게 남길 수 없을까?"
+      - generic [ref=e29]:
+        - generic [ref=e30]:
+          - heading "Family" [level=3] [ref=e31]
+          - paragraph [ref=e32]: "\"부모님의 건강한 모습을 평면 사진이 아닌, 공간감이 느껴지는 입체로 보관하고 싶다.\""
+        - generic [ref=e33]:
+          - heading "Pet" [level=3] [ref=e34]
+          - paragraph [ref=e35]: "\"반려견이 떠난 후에도 쓰다듬고 교감할 수 있는 실물과 3D 아바타가 있었으면 좋겠다.\""
+        - generic [ref=e36]:
+          - heading "Wedding" [level=3] [ref=e37]
+          - paragraph [ref=e38]: "\"우리의 가장 빛나는 순간을 액자를 넘어 트로피처럼 입체적으로 간직하고 싶다.\""
+  - generic [ref=e39]:
+    - generic [ref=e42]: 04 / 18
+    - generic [ref=e43]:
+      - generic [ref=e44]: DEFINE
+      - heading "고객은 원하지만, 기존 산업이 풀지 못한 3가지 한계" [level=2] [ref=e45]:
+        - text: 고객은 원하지만,
+        - text: 기존 산업이 풀지 못한 3가지 한계
+      - generic [ref=e46]:
+        - generic [ref=e47]:
+          - generic [ref=e48]: 15%
+          - heading "높은 클레임률 (정확도)" [level=3] [ref=e49]
+          - paragraph [ref=e50]: 평면 사진 기반의 수작업 모델링은 고객의 기대치를 맞추기 어렵고 반복적인 수정과 높은 불만족을 야기합니다.
+        - generic [ref=e51]:
+          - generic [ref=e52]: 3주
+          - heading "수작업 병목 (리드타임)" [level=3] [ref=e53]
+          - paragraph [ref=e54]: 주문부터 배송까지 3주 이상 소요되는 100% 수작업 프로세스로는 스케일업(Scale-up)이 불가능합니다.
+        - generic [ref=e55]:
+          - generic [ref=e56]: 0원
+          - heading "휘발되는 데이터 (수익성)" [level=3] [ref=e57]
+          - paragraph [ref=e58]: 비싸게 만든 3D 에셋이 일회성 출력으로 끝납니다. 데이터 재사용을 통한 후속 LTV 창출 모델이 부재합니다.
+  - generic [ref=e59]:
+    - generic [ref=e62]: 05 / 18
+    - generic [ref=e63]:
+      - generic [ref=e64]: REFRAME
+      - heading "본질은 피규어 제조가 아니라 오프라인 3D 스캔 네트워크입니다" [level=2] [ref=e65]:
+        - text: 본질은 피규어 제조가 아니라
+        - text: 오프라인 3D 스캔 네트워크입니다
+      - paragraph [ref=e66]:
+        - text: 42대 카메라 동시 촬영으로 현실의 사람과 반려동물을
+        - text: 0.1초 만에 3D 데이터로 변환하는 고객 접점이 이미 구축되어 있습니다.
+      - generic [ref=e67]:
+        - generic [ref=e68]:
+          - generic [ref=e69]: 0.1s
+          - heading "360° 순간 캡처" [level=3] [ref=e70]
+          - paragraph [ref=e71]: 움직임 블러 없는 정밀 스캔
+        - generic [ref=e72]:
+          - generic [ref=e73]: 6+
+          - heading "전국 오프라인 거점" [level=3] [ref=e74]
+          - paragraph [ref=e75]: 서울·수도권 중심 매장/팝업
+        - generic [ref=e76]:
+          - generic [ref=e77]: 2-3w
+          - heading "안정화된 리드타임" [level=3] [ref=e78]
+          - paragraph [ref=e79]: 촬영→모델링→출력 자동화
+  - generic [ref=e80]:
+    - generic [ref=e83]: 06 / 18
+    - generic [ref=e85]:
+      - generic [ref=e86]:
+        - generic [ref=e87]: SOLUTION
+        - heading "단 0.1초의 스캔, 무한한 확장" [level=2] [ref=e88]:
+          - text: 단 0.1초의 스캔,
+          - text: 무한한 확장
+        - paragraph [ref=e89]:
+          - text: 고객은 순간의 기억을 캡처하고,
+          - text: 우리는 완벽한 3D 디지털 자산을 확보합니다.
+        - list [ref=e90]:
+          - listitem [ref=e91]:
+            - text: ▸
+            - strong [ref=e92]: "Capture:"
+            - text: 42대 카메라로 0.1초 찰나의 표정까지 동기화 스캔
+          - listitem [ref=e93]:
+            - text: ▸
+            - strong [ref=e94]: "Generate:"
+            - text: AI 보정 파이프라인으로 메쉬와 텍스처 최적화
+          - listitem [ref=e95]:
+            - text: ▸
+            - strong [ref=e96]: "Deliver:"
+            - text: 초정밀 3D 프린팅 및 수작업 후처리로 실물 제공
+      - img "Workflow" [ref=e98]
+  - generic [ref=e99]:
+    - generic [ref=e102]: 07 / 18
+    - generic [ref=e104]:
+      - img "Product Hierarchy" [ref=e106]
+      - generic [ref=e107]:
+        - generic [ref=e108]: PRODUCT LADDER
+        - heading "하나의 스캔, 확장되는 제품 라인업" [level=2] [ref=e109]:
+          - text: 하나의 스캔,
+          - text: 확장되는 제품 라인업
+        - paragraph [ref=e110]:
+          - text: 엔트리 상품으로 진입 장벽을 낮추고,
+          - text: 프리미엄 실물과 디지털 자산으로 LTV를 극대화합니다.
+        - generic [ref=e111]:
+          - generic [ref=e112]:
+            - heading "1. ENTRY (가벼운 시도)" [level=3] [ref=e113]
+            - paragraph [ref=e114]: 키링, 스탠드 등 접근성 높은 굿즈 (5만 원대)
+          - generic [ref=e115]:
+            - heading "2. PREMIUM (강렬한 기억)" [level=3] [ref=e116]
+            - paragraph [ref=e117]: 웨딩, 가족, 반려견 정밀 피규어 (20~40만 원대)
+          - generic [ref=e118]:
+            - heading "3. DIGITAL (데이터 재사용)" [level=3] [ref=e119]
+            - paragraph [ref=e120]: 3D 메타버스 아바타, 증강현실(AR) 스튜디오 자산
+  - generic [ref=e121]:
+    - generic [ref=e124]: 08 / 18
+    - generic [ref=e125]:
+      - generic [ref=e126]: GO-TO-MARKET
+      - heading "감정 강도가 가장 높은 공간에 B2B2C 파트너십으로 진입합니다" [level=2] [ref=e127]:
+        - text: 감정 강도가 가장 높은 공간에
+        - text: B2B2C 파트너십으로 진입합니다
+      - paragraph [ref=e128]:
+        - text: 웨딩홀, 5성급 호텔, 프리미엄 백화점 공간에 진입하여
+        - text: 고객 획득 비용(CAC)을 절감하고 데이터 재사용 습관을 만듭니다.
+      - generic [ref=e129]:
+        - generic [ref=e130]:
+          - heading "가족·반려동물 (B2C)" [level=3] [ref=e131]
+          - paragraph [ref=e132]: 자사 매장 및 온라인 예약을 통한 특별한 일상의 기록
+        - generic [ref=e133]:
+          - heading "웨딩·호텔·백화점 (B2B2C)" [level=3] [ref=e134]
+          - paragraph [ref=e135]: 고관여 프리미엄 채널과의 제휴 팝업. CAC 획기적 절감
+        - generic [ref=e136]:
+          - heading "메타버스·AR (Digital)" [level=3] [ref=e137]
+          - paragraph [ref=e138]: Roblox, ZEPETO 등 가상 세계로의 3D 에셋 확장
+  - generic [ref=e139]:
+    - generic [ref=e142]: 09 / 18
+    - generic [ref=e144]:
+      - generic [ref=e145]:
+        - generic [ref=e146]: ECONOMIC MOAT
+        - heading "압도적 마진을 창출하는 데이터 플라이휠" [level=2] [ref=e147]:
+          - text: 압도적 마진을 창출하는
+          - text: 데이터 플라이휠
+        - paragraph [ref=e148]:
+          - text: 제조 원가는 첫 구매에만 발생합니다.
+          - text: 확보된 3D 데이터로 파생 상품을 만들수록
+          - text: 한계 비용은 '0'에 수렴하고 마진은 90%까지 치솟습니다.
+      - img "Data Flywheel" [ref=e150]
+  - generic [ref=e151]:
+    - generic [ref=e154]: 10 / 18
+    - generic [ref=e155]:
+      - generic [ref=e156]: OPERATING SYSTEM
+      - heading "주문이 아닌 소프트웨어로 관리합니다" [level=2] [ref=e157]
+      - paragraph [ref=e158]:
+        - text: 스캔 데이터 수집부터 출력, 배송까지 전 과정을 관제하는
+        - text: 자체 통합 대시보드를 구축하여 스케일업의 기반을 마련합니다.
+      - generic [ref=e159]:
+        - generic [ref=e160]:
+          - heading "1. CRM & Booker" [level=3] [ref=e161]
+          - paragraph [ref=e162]:
+            - text: 온라인 예약/결제 자동화
+            - text: 상담 인력 60% 절감
+        - generic [ref=e163]:
+          - heading "2. Asset Pipeline" [level=3] [ref=e164]
+          - paragraph [ref=e165]:
+            - text: 클라우드 기반 3D 모델링
+            - text: 리드타임 40% 단축
+        - generic [ref=e166]:
+          - heading "3. Factory Ctrl" [level=3] [ref=e167]
+          - paragraph [ref=e168]:
+            - text: 프린터 스케줄링 API
+            - text: 불량률 3% 미만 달성
+        - generic [ref=e169]:
+          - heading "4. Data Hub" [level=3] [ref=e170]
+          - paragraph [ref=e171]:
+            - text: 개인별 디지털 트윈 보관
+            - text: 재구매율 증가 유도
+  - generic [ref=e172]:
+    - generic [ref=e175]: 11 / 18
+    - generic [ref=e176]:
+      - generic [ref=e177]: FUNDRAISING
+      - heading "18개월의 성장을 위한 ₩4.5B Seed 라운드" [level=2] [ref=e178]:
+        - text: 18개월의 성장을 위한
+        - text: ₩4.5B Seed 라운드
+      - paragraph [ref=e179]:
+        - text: 조달 자금은 스캔 네트워크의 B2B 파트너십 확장과
+        - text: 운영 소프트웨어 고도화에 집중 투자됩니다.
+      - generic [ref=e180]:
+        - generic [ref=e181]:
+          - generic [ref=e182]: 35%
+          - heading "네트워크 확장 (₩1.58B)" [level=3] [ref=e183]
+          - paragraph [ref=e184]: B2B 스캔 부스 증설, 거점 확대
+        - generic [ref=e185]:
+          - generic [ref=e186]: 40%
+          - heading "R&D & OS 고도화 (₩1.8B)" [level=3] [ref=e187]
+          - paragraph [ref=e188]: 통합 대시보드 구축 및 AI 파이프라인
+        - generic [ref=e189]:
+          - generic [ref=e190]: 25%
+          - heading "조직 및 마케팅 (₩1.12B)" [level=3] [ref=e191]
+          - paragraph [ref=e192]: 핵심 인재 영입 및 초기 채널 마케팅
+  - generic [ref=e193]:
+    - generic [ref=e196]: 12 / 12
+    - generic [ref=e197]:
+      - heading "피규어 회사가 아니라, 사람의 3D 자산을 보관하고 재사용하게 만드는 회사" [level=1] [ref=e198]:
+        - text: 피규어 회사가 아니라,
+        - text: 사람의 3D 자산을 보관하고
+        - text: 재사용하게 만드는 회사
+      - paragraph [ref=e199]:
+        - text: 기억을 사는 고객 접점에서 출발해,
+        - text: 실물 굿즈와 디지털 트윈을 동시에 확장합니다.
+      - generic [ref=e200]:
+        - generic [ref=e201]:
+          - generic [ref=e202]: ₩4.5B
+          - generic [ref=e203]: Seed / Pre-A
+        - generic [ref=e205]:
+          - generic [ref=e206]: 6+
+          - generic [ref=e207]: 오프라인 거점
+        - generic [ref=e209]:
+          - generic [ref=e210]: 4L
+          - generic [ref=e211]: Platform Layers
+      - link "CONNECT WITH US" [ref=e212] [cursor=pointer]:
+        - /url: "#"
+  - generic:
+    - generic: SCAN COMPLETE ✓
+    - generic: 0%
+    - generic:
+      - generic:
+        - generic: ● SCAN COMPLETE
+      - generic:
+        - generic: 이건우
+        - generic: Founder · MyMiniMe Studio
+      - generic:
+        - generic:
+          - link "전화 걸기":
+            - /url: tel:01082010817
+            - generic: 📱
+            - text: 010-8201-0817
+          - link "이메일 보내기":
+            - /url: mailto:nadalgw@gmail.com
+            - generic: ✉
+            - text: nadalgw@gmail.com
+      - generic:
+        - button "✕ CLOSE" [active]

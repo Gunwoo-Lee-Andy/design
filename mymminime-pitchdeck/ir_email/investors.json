@@ -1,0 +1,178 @@
+[
+  {
+    "name": "스마일게이트인베스트먼트",
+    "email": "siv2@smilegate.com",
+    "type": "kr",
+    "priority": 3,
+    "category": "IP·콘텐츠 특화",
+    "portfolio_note": "IP·게임·콘텐츠 이해도 최상"
+  },
+  {
+    "name": "가이아벤처파트너스",
+    "email": "gaiavp@gaiavp.com",
+    "type": "kr",
+    "priority": 3,
+    "category": "IP·콘텐츠 특화",
+    "portfolio_note": "문화산업 전문 VC"
+  },
+  {
+    "name": "대교인베스트먼트",
+    "email": "webmaster@daekyoinvest.com",
+    "type": "kr",
+    "priority": 3,
+    "category": "IP·콘텐츠 특화",
+    "portfolio_note": "키즈·에듀 분야 강점"
+  },
+  {
+    "name": "카카오벤처스",
+    "email": "hello@kakao.vc",
+    "type": "kr",
+    "priority": 3,
+    "category": "액셀러레이터",
+    "portfolio_note": "카카오 생태계 연계 강점"
+  },
+  {
+    "name": "스파크랩",
+    "email": "hey@sparklabs.co.kr",
+    "type": "kr",
+    "priority": 3,
+    "category": "액셀러레이터",
+    "portfolio_note": "소비재·기술·브랜드, 12시간 내 회신 정책"
+  },
+  {
+    "name": "IMM인베스트먼트",
+    "email": "imm@imminvestment.com",
+    "type": "kr",
+    "priority": 3,
+    "category": "대형 VC",
+    "portfolio_note": "캐릭터IP플랫폼 HNF 투자 이력"
+  },
+  {
+    "name": "스톤브릿지벤처스",
+    "email": "info@stonebridge.co.kr",
+    "type": "kr",
+    "priority": 3,
+    "category": "대형 VC",
+    "portfolio_note": "브랜드 소비재 포트폴리오 보유"
+  },
+  {
+    "name": "인터베스트",
+    "email": "admin@intervest.co.kr",
+    "type": "kr",
+    "priority": 3,
+    "category": "대형 VC",
+    "portfolio_note": "IP·플랫폼 소비재 강점"
+  },
+  {
+    "name": "Altos Ventures",
+    "email": "info@altos.vc",
+    "type": "en",
+    "priority": 3,
+    "category": "한국연계",
+    "portfolio_note": "Coupang, Toss investor. Seoul + SF presence"
+  },
+  {
+    "name": "Forerunner Ventures",
+    "email": "info@forerunnerventures.com",
+    "type": "en",
+    "priority": 3,
+    "category": "컨슈머 특화",
+    "portfolio_note": "Top consumer brand VC"
+  },
+  {
+    "name": "Renegade Partners",
+    "email": "hi@renegadepartners.com",
+    "type": "en",
+    "priority": 3,
+    "category": "컨슈머 특화",
+    "portfolio_note": "DTC early consumer specialist"
+  },
+  {
+    "name": "LB인베스트먼트",
+    "email": "lbadmin@lbinvestment.com",
+    "type": "kr",
+    "priority": 2,
+    "category": "대형 VC",
+    "portfolio_note": "대형 소비재·헬스 투자"
+  },
+  {
+    "name": "미래에셋벤처투자",
+    "email": "miraeventure@miraeasset.com",
+    "type": "kr",
+    "priority": 2,
+    "category": "대형 VC",
+    "portfolio_note": "글로벌 확장 지원 강점"
+  },
+  {
+    "name": "포스코기술투자",
+    "email": "investment@poscoinvestment.com",
+    "type": "kr",
+    "priority": 2,
+    "category": "대형 VC",
+    "portfolio_note": "소재·제조 기반 소비재"
+  },
+  {
+    "name": "DSC인베스트먼트",
+    "email": "contact@dscinvestment.com",
+    "type": "kr",
+    "priority": 2,
+    "category": "대형 VC",
+    "portfolio_note": "소비재·플랫폼"
+  },
+  {
+    "name": "에이티넘인베스트먼트",
+    "email": "admin@atinuminvest.co.kr",
+    "type": "kr",
+    "priority": 2,
+    "category": "대형 VC",
+    "portfolio_note": "소비재·헬스·IT"
+  },
+  {
+    "name": "프라이머",
+    "email": "lgh@primer.kr",
+    "type": "kr",
+    "priority": 2,
+    "category": "액셀러레이터",
+    "portfolio_note": "초기 스타트업 전반"
+  },
+  {
+    "name": "블루포인트파트너스",
+    "email": "apply@bluepoint.ac",
+    "type": "kr",
+    "priority": 2,
+    "category": "액셀러레이터",
+    "portfolio_note": "기술·소비재 초기"
+  },
+  {
+    "name": "퓨처플레이",
+    "email": "communication@futureplay.co",
+    "type": "kr",
+    "priority": 2,
+    "category": "액셀러레이터",
+    "portfolio_note": "딥테크·콘텐츠"
+  },
+  {
+    "name": "크립톤",
+    "email": "contact@krypton36.co",
+    "type": "kr",
+    "priority": 2,
+    "category": "액셀러레이터",
+    "portfolio_note": "소비재·기술 초기, 이메일 유일한 접수처"
+  },
+  {
+    "name": "캡스톤파트너스",
+    "email": "biz@cspartners.co.kr",
+    "type": "kr",
+    "priority": 2,
+    "category": "액셀러레이터",
+    "portfolio_note": "초기 기업 투자 전문"
+  },
+  {
+    "name": "SV인베스트먼트",
+    "email": "master@svinvest.com",
+    "type": "kr",
+    "priority": 2,
+    "category": "액셀러레이터",
+    "portfolio_note": "성장 단계 전반"
+  }
+]

@@ -1,0 +1,203 @@
+/*  ────────────────────────────────────────────────────────
+    MyMiniMe Studio · Design Tokens v3
+    Airbnb DLS + Korean Readability Optimized
+    
+    Readability rules:
+      • Korean body ≥ 22px, line-height ≥ 1.7
+      • English display uses Jakarta, Korean uses Pretendard
+      • Minimum contrast ratio 4.5:1 for body text
+      • Generous vertical rhythm between blocks
+    ──────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Serif+KR:wght@700;900&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
+:root {
+  /* ── Palette ────────────────────────────────────── */
+  --ink:       #222222;
+  --ink-light: #484848;
+  --ink-faint: #717171;        /* WCAG AA on white  */
+  --surface:   #FFFFFF;
+  --surface-2: #F7F7F7;
+  --border:    #DDDDDD;
+  --coral:     #FF385C;
+  --teal:      #008489;
+  --warm:      #FFF8F6;
+
+  /* ── Typography ─────────────────────────────────── */
+  --display: 'Plus Jakarta Sans', 'Pretendard', sans-serif;
+  --body:    'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  --serif:   'Noto Serif KR', Georgia, serif;
+
+  /* ── Spacing (1920 × 1080) ──────────────────────── */
+  --pad: 140px;
+  --pad-top: 100px;
+  --gap: 60px;
+}
+
+/* ── Reset ────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;       /* 한글 줄바꿈 최적화 */
+  overflow-wrap: break-word;
+}
+
+/* ── Slide scaffold ───────────────────────────────── */
+.slide {
+  position: relative;
+  width: 100%; height: 100%;
+  padding: var(--pad-top) var(--pad);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Section label ────────────────────────────────── */
+.section-label {
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 48px;
+}
+
+/* ── Headings ─────────────────────────────────────── */
+h1 {
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: 80px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+h2 {
+  font-family: var(--body);
+  font-weight: 800;
+  font-size: 56px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+h3 {
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+/* ── Body text ────────────────────────────────────── */
+.lead {
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--ink-light);
+  max-width: 900px;
+}
+
+.caption {
+  font-size: 16px;
+  color: var(--ink-faint);
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+/* ── Accent ───────────────────────────────────────── */
+.coral  { color: var(--coral); }
+.teal   { color: var(--teal); }
+
+/* ── Footer ───────────────────────────────────────── */
+.slide-footer {
+  position: absolute;
+  bottom: 40px;
+  left: var(--pad);
+  right: var(--pad);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-faint);
+}
+
+.page-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--coral);
+  display: inline-block;
+  margin-right: 10px;
+}
+
+/* ── Card ─────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 48px;
+}
+
+.card-dark {
+  background: var(--ink);
+  border: none;
+  border-radius: 16px;
+  padding: 48px;
+  color: #fff;
+}
+
+/* ── Stat ─────────────────────────────────────────── */
+.stat-value {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 72px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.stat-label {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink-faint);
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+/* ── Divider ──────────────────────────────────────── */
+.divider {
+  width: 64px; height: 4px;
+  background: var(--coral);
+  border-radius: 2px;
+  margin: 32px 0;
+}
+
+/* ── Image helper ─────────────────────────────────── */
+.img-cover {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+/* ── Animation ────────────────────────────────────── */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.rise   { animation: rise 0.7s cubic-bezier(.22,1,.36,1) both; }
+.rise-2 { animation: rise 0.7s cubic-bezier(.22,1,.36,1) 0.12s both; }
+.rise-3 { animation: rise 0.7s cubic-bezier(.22,1,.36,1) 0.24s both; }
+.rise-4 { animation: rise 0.7s cubic-bezier(.22,1,.36,1) 0.36s both; }
+.rise-5 { animation: rise 0.7s cubic-bezier(.22,1,.36,1) 0.48s both; }

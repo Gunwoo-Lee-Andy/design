@@ -1,0 +1,3 @@
+[   10583ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:7788/favicon.ico:0
+[  113163ms] [LOG] link clicked, defaultPrevented: false target: A @ :4
+[  180927ms] [LOG] link clicked, defaultPrevented: false target: A @ :4

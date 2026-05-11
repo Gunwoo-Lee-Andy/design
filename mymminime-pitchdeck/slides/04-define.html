@@ -1,0 +1,111 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">
+<title>04 · Define</title>
+<link rel="stylesheet" href="../shared/tokens.css">
+<style>
+  .slide { justify-content: center; }
+
+  h2 { font-size: 52px; margin-bottom: 28px; line-height: 1.3; }
+  .lead { margin-bottom: 64px; }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-bottom: 72px;
+  }
+
+  .p-card {
+    border-top: 3px solid var(--border);
+    padding-top: 32px;
+  }
+
+  .p-card .num {
+    font-family: var(--display);
+    font-size: 14px; font-weight: 800;
+    color: var(--coral);
+    margin-bottom: 16px;
+  }
+
+  .p-card h3 {
+    font-size: 24px; margin-bottom: 14px;
+    line-height: 1.4;
+  }
+
+  .p-card p {
+    font-size: 20px;
+    color: var(--ink-light);
+    line-height: 1.7;
+  }
+
+  .reframe-strip {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .old {
+    font-size: 22px;
+    color: var(--ink-faint);
+    text-decoration: line-through;
+    text-decoration-color: var(--coral);
+    text-decoration-thickness: 2px;
+    flex-shrink: 0;
+  }
+
+  .arrow {
+    font-size: 28px;
+    color: var(--coral);
+    flex-shrink: 0;
+    font-weight: 300;
+  }
+
+  .new {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+</style>
+</head><body>
+  <div class="slide">
+    <div class="section-label rise">03 · DEFINE</div>
+
+    <h2 class="rise-2">3D 데이터는 만들어지지만<br>쓸 곳이 하나뿐이라 <span class="coral">자산이 안 됩니다</span></h2>
+
+    <p class="lead rise-3">
+      고객·매장·모델러·출력팀·파트너가 서로 다른 목적과 언어로 움직여<br>
+      데이터가 자산으로 축적되지 못하고 일회성으로 소모됩니다.
+    </p>
+
+    <div class="problem-grid">
+      <div class="p-card rise-3">
+        <div class="num">LAYER 01</div>
+        <h3>고객 경험의 불안</h3>
+        <p>완성물을 상상하기 어렵고, 제작 중간에 기대치가 흔들려 클레임이 발생합니다.</p>
+      </div>
+      <div class="p-card rise-4">
+        <div class="num">LAYER 02</div>
+        <h3>운영의 수작업 병목</h3>
+        <p>촬영→모델링→검수→출력 전 과정이 사람 의존적이라 원가와 리드타임이 비례 증가합니다.</p>
+      </div>
+      <div class="p-card rise-5">
+        <div class="num">LAYER 03</div>
+        <h3>재사용 루프의 부재</h3>
+        <p>피규어 1개 제작 후 3D 파일이 사장됩니다. 고객도 사업자도 데이터를 다시 쓸 방법이 없습니다.</p>
+      </div>
+    </div>
+
+    <div class="reframe-strip rise-5">
+      <span class="old">"피규어를 더 잘 만드는 것"</span>
+      <span class="arrow">→</span>
+      <span class="new">개인 3D 데이터를 <span class="coral">계속 쓰게 만드는 것</span></span>
+    </div>
+
+    <div class="slide-footer">
+      <span><span class="page-dot"></span>MYMINIME STUDIO</span>
+      <span>04</span>
+    </div>
+  </div>
+</body></html>

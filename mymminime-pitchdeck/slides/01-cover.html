@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">
+<title>Cover · MyMiniMe Studio</title>
+<link rel="stylesheet" href="../shared/tokens.css">
+<style>
+  body { background: #000; }
+
+  .hero-img {
+    position: absolute; top: 0; right: 0;
+    width: 55%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.8);
+  }
+
+  .gradient-overlay {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(
+      to right,
+      #000 0%, #000 36%,
+      rgba(0,0,0,0.7) 48%,
+      transparent 62%
+    );
+  }
+
+  .content {
+    position: relative; z-index: 1;
+    height: 100%;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 var(--pad);
+    max-width: 880px;
+  }
+
+  .eyebrow {
+    font-family: var(--display);
+    font-size: 16px; font-weight: 700;
+    letter-spacing: 0.4em;
+    color: var(--coral);
+    margin-bottom: 36px;
+  }
+
+  h1 {
+    font-family: var(--display);
+    color: #fff;
+    font-size: 88px;
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+  }
+
+  .sub {
+    font-size: 24px; font-weight: 400;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.7;
+  }
+
+  .bottom-bar {
+    position: absolute; bottom: 48px; left: var(--pad); right: var(--pad);
+    display: flex; justify-content: space-between;
+    color: rgba(255,255,255,0.3);
+    font-family: var(--display);
+    font-size: 13px; font-weight: 600;
+    letter-spacing: 0.15em;
+  }
+  .bottom-bar .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--coral); margin-right: 10px; display: inline-block; }
+</style>
+</head><body>
+  <img src="../assets/studio.png" class="hero-img" alt="3D Scanning Studio">
+  <div class="gradient-overlay"></div>
+
+  <div class="content">
+    <div class="eyebrow rise">SEED / PRE-A  ·  ₩4.5B</div>
+    <h1 class="rise-2">Personal<br>Digital Twin<br>Platform</h1>
+    <p class="sub rise-3">
+      사람과 반려동물을 3D 자산으로 바꾸고,<br>
+      그 데이터가 반복적으로 가치를 만드는 플랫폼.
+    </p>
+  </div>
+
+  <div class="bottom-bar rise-4">
+    <span><span class="dot"></span>MYMINIME STUDIO</span>
+    <span>DESIGN THINKING EDITION · 2026</span>
+  </div>
+</body></html>

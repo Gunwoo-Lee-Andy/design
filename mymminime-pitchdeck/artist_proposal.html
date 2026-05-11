@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>MyMiniMe Studio · Artist Goods Partnership</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css");
+
+  :root {
+    --g: #1DB954; --gl: #1ED760; --gg: rgba(29,185,84,0.18);
+    --ink: #121212; --s1: #181818; --s2: #282828; --s3: #3E3E3E;
+    --bd: rgba(255,255,255,0.07);
+    --t1: #fff; --t2: rgba(255,255,255,0.7); --t3: rgba(255,255,255,0.38);
+    --dp: 'Plus Jakarta Sans', sans-serif;
+    --bd-font: 'Pretendard', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--ink); color: var(--t1); font-family: var(--bd-font); overflow-x: hidden; scroll-snap-type: y mandatory; }
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  /* ─── Keyframes ─── */
+  @keyframes fadeUp   { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeLeft { from { opacity:0; transform:translateX(-28px); } to { opacity:1; transform:translateX(0); } }
+  @keyframes fadeRight{ from { opacity:0; transform:translateX(28px); } to { opacity:1; transform:translateX(0); } }
+  @keyframes zoomIn   { from { opacity:0; transform:scale(0.93); } to { opacity:1; transform:scale(1); } }
+  @keyframes eq       { 0%,100%{ transform:scaleY(0.3); } 50%{ transform:scaleY(1); } }
+  @keyframes pRing    { 0%{ transform:scale(1); opacity:0.6; } 100%{ transform:scale(1.6); opacity:0; } }
+  @keyframes bob      { 0%,100%{ transform:translate(-50%,0); opacity:0.3; } 50%{ transform:translate(-50%,8px); opacity:0.6; } }
+  @keyframes glow     { 0%,100%{ box-shadow:0 0 8px var(--gg); } 50%{ box-shadow:0 0 24px rgba(29,185,84,0.4); } }
+  @keyframes lineGrow { from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
+  @keyframes shimmer  { 0%{background-position:-200% center;} 100%{background-position:200% center;} }
+
+  /* ─── Entrance helpers ─── */
+  .a-up    { opacity:0; }  .a-up.go    { animation: fadeUp    0.75s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .a-left  { opacity:0; }  .a-left.go  { animation: fadeLeft  0.75s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .a-right { opacity:0; }  .a-right.go { animation: fadeRight 0.75s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .a-zoom  { opacity:0; }  .a-zoom.go  { animation: zoomIn    0.65s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .d0{animation-delay:0s;} .d1{animation-delay:.09s;} .d2{animation-delay:.18s;}
+  .d3{animation-delay:.27s;} .d4{animation-delay:.36s;} .d5{animation-delay:.45s;}
+
+  /* ─── Nav dots ─── */
+  .nav-dots { position:fixed; right:22px; top:50%; transform:translateY(-50%); z-index:100; display:flex; flex-direction:column; gap:10px; }
+  .nav-dot  { width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,0.18); border:none; cursor:pointer; transition:all .3s; }
+  .nav-dot.active { background:var(--g); transform:scale(1.8); box-shadow:0 0 8px var(--gg); }
+
+  /* ─── Sections ─── */
+  section { position:relative; width:100vw; height:100vh; scroll-snap-align:start; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .bg-img { position:absolute; inset:0; background-size:cover; background-position:center; z-index:1; }
+  .ov  { position:absolute; inset:0; z-index:2; background:linear-gradient(135deg,rgba(18,18,18,.97) 0%,rgba(18,18,18,.72) 60%,rgba(18,18,18,.95) 100%); }
+  .ov-d{ background:rgba(18,18,18,.9); }
+  .ov-s{ background:var(--ink); }
+  .content { position:relative; z-index:3; width:100%; max-width:1400px; padding:0 80px; }
+
+  /* ─── Type ─── */
+  h1 { font-family:var(--dp); font-size:78px; font-weight:800; line-height:1.06; margin-bottom:28px; letter-spacing:-.03em; word-break:keep-all; }
+  h2 { font-family:var(--dp); font-size:56px; font-weight:800; line-height:1.12; margin-bottom:22px; letter-spacing:-.025em; word-break:keep-all; }
+  h3 { font-size:21px; font-weight:700; margin-bottom:10px; word-break:keep-all; }
+  p.lead { font-size:21px; font-weight:400; line-height:1.7; color:var(--t2); max-width:820px; word-break:keep-all; }
+  p.desc { font-size:15px; line-height:1.75; color:var(--t3); word-break:keep-all; }
+  .label { font-family:var(--dp); font-size:11px; font-weight:700; letter-spacing:.2em; color:var(--g); margin-bottom:18px; display:block; text-transform:uppercase; }
+  .green { color:var(--g); } .white { color:#fff; } .dim { color:var(--t3); }
+
+  /* ─── Layouts ─── */
+  .g2 { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+  .g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .g4 { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+
+  /* ─── Spotify Cards ─── */
+  .card { background:var(--s1); border-radius:8px; padding:24px; height:100%; display:flex; flex-direction:column; transition:background .2s,transform .2s; }
+  .card:hover { background:var(--s2); transform:scale(1.02); }
+  .card.lg { padding:40px; border-radius:12px; }
+  .card.accent { background:rgba(29,185,84,0.08); border:1px solid rgba(29,185,84,0.25); }
+  .card.dark { background:rgba(18,18,18,.95); border:1px solid var(--bd); }
+
+  /* ─── EQ Bars ─── */
+  /* ─── EQ Bars Removed ─── */
+
+
+  /* ─── Waveform bg ─── */
+  .wv-bg { position:absolute; inset:0; z-index:1; overflow:hidden; pointer-events:none; }
+  .wv-bg svg { position:absolute; bottom:0; width:100%; height:120px; opacity:0.05; }
+
+  /* ─── Stat bar ─── */
+  .stat-bar { display:flex; border:1px solid var(--bd); border-radius:12px; overflow:hidden; max-width:640px; margin:0 auto 44px; background:rgba(255,255,255,0.02); }
+  .sbi { flex:1; padding:20px 24px; text-align:center; border-right:1px solid var(--bd); }
+  .sbi:last-child { border-right:none; }
+  .sbn { font-family:var(--dp); font-size:40px; font-weight:800; line-height:1; letter-spacing:-.02em; }
+  .sbs { font-size:12px; color:var(--t3); margin-top:5px; }
+
+  /* ─── Badges ─── */
+  .badge { display:inline-flex; align-items:center; gap:8px; padding:7px 14px; border-radius:100px; font-size:12px; font-weight:600; }
+  .bg-g   { background:rgba(29,185,84,.14); color:var(--g); border:1px solid rgba(29,185,84,.28); }
+  .bg-dim { background:rgba(255,255,255,.06); color:var(--t2); }
+
+  /* ─── Track list (Solution table) ─── */
+  .track-list { width:100%; border-collapse:collapse; }
+  .track-list th { padding:8px 16px 14px; text-align:left; font-size:11px; letter-spacing:.1em; color:var(--t3); font-weight:600; text-transform:uppercase; border-bottom:1px solid var(--bd); }
+  .track-list td { padding:14px 16px; font-size:16px; border-bottom:1px solid rgba(255,255,255,.04); transition:background .15s; }
+  .track-list tr:hover td { background:rgba(255,255,255,.04); }
+  .track-list tr:last-child td { border-bottom:none; }
+  .track-list tr.hi td { font-weight:700; }
+  .track-list td.g { color:var(--g); font-weight:700; }
+  .track-list td.d { color:var(--t3); }
+
+  /* ─── Profit bars (러프하게) ─── */
+  .pt { padding:18px 0; border-bottom:1px solid rgba(255,255,255,.05); }
+  .pt:last-child { border-bottom:none; }
+  .pt-hd { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
+  .pt-name { font-size:16px; font-weight:600; color:var(--t2); }
+  .pt-num  { font-family:var(--dp); font-size:32px; font-weight:800; color:var(--g); line-height:1; }
+  .pt.hot .pt-num { color:var(--gl); text-shadow:0 0 20px rgba(29,185,84,.45); }
+  .bar-track { height:6px; background:var(--s2); border-radius:3px; overflow:hidden; }
+  .bar-fill  { height:100%; width:0; background:var(--g); border-radius:3px; transition:width 1.3s cubic-bezier(.25,1,.5,1); }
+  .pt.hot .bar-fill { background:linear-gradient(to right,var(--g),var(--gl)); box-shadow:0 0 12px rgba(29,185,84,.5); }
+  .pt-meta { font-size:12px; color:var(--t3); margin-top:6px; }
+
+  /* ─── Guarantee row ─── */
+  .gr { display:flex; align-items:flex-start; gap:20px; padding:26px 0; border-bottom:1px solid var(--bd); }
+  .gr:last-child { border-bottom:none; }
+  .gi { width:44px; height:44px; border-radius:10px; background:rgba(29,185,84,.1); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:20px; }
+
+  /* ─── Strike rows ─── */
+  .sk { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.04); }
+  .sk:last-child { border-bottom:none; }
+  .cx { width:20px; height:20px; border-radius:50%; background:rgba(255,255,255,.05); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:9px; color:var(--t3); }
+
+  /* ─── Process line ─── */
+  .proc-line { height:2px; background:linear-gradient(to right,var(--g),rgba(29,185,84,.1)); margin:0 0 28px; transform:scaleX(0); transform-origin:left; border-radius:1px; }
+  .proc-line.go { animation:lineGrow 1.2s cubic-bezier(.16,1,.3,1) forwards .25s; }
+
+  /* ─── Scarcity ─── */
+  .scar-w { max-width:380px; margin:0 auto 44px; }
+  .scar-t { height:4px; background:var(--s2); border-radius:2px; overflow:hidden; margin:10px 0; }
+  .scar-f { height:100%; width:0; background:var(--g); border-radius:2px; transition:width 1s ease .6s; }
+
+  /* ─── Buttons ─── */
+  .btn-p { position:relative; display:inline-flex; align-items:center; gap:12px; padding:18px 48px; background:var(--g); color:#000; text-decoration:none; border-radius:100px; font-family:var(--dp); font-size:16px; font-weight:700; transition:transform .2s,background .2s; overflow:visible; }
+  .btn-p:hover { background:var(--gl); transform:scale(1.04); }
+  .btn-p::after { content:''; position:absolute; inset:0; border-radius:100px; background:var(--g); animation:pRing 2s ease-out infinite; z-index:-1; }
+  .btn-s { display:inline-flex; align-items:center; gap:10px; padding:18px 32px; color:var(--t2); text-decoration:none; border-radius:100px; border:1px solid var(--bd); font-size:15px; font-weight:600; transition:border-color .2s,color .2s; }
+  .btn-s:hover { border-color:rgba(255,255,255,.3); color:#fff; }
+
+  /* ─── Pull quote ─── */
+  .pq { border-left:3px solid var(--g); padding-left:20px; font-size:18px; font-style:italic; color:var(--t2); line-height:1.65; }
+  .gline { width:40px; height:2px; background:var(--g); border-radius:1px; margin-bottom:22px; }
+  .ghost-n { position:absolute; top:-8px; left:-6px; font-family:var(--dp); font-size:100px; font-weight:800; letter-spacing:-.05em; line-height:.9; color:rgba(255,255,255,.025); pointer-events:none; }
+  .scroll-hint { position:absolute; bottom:28px; left:50%; z-index:10; color:var(--t3); font-size:10px; letter-spacing:.2em; font-family:var(--dp); animation:bob 2.5s ease-in-out infinite; pointer-events:none; text-transform:uppercase; }
+  .contact-row { display:flex; gap:48px; justify-content:center; padding-top:30px; border-top:1px solid var(--bd); }
+  .clbl { font-size:10px; letter-spacing:.2em; color:var(--t3); margin-bottom:6px; text-transform:uppercase; }
+  .cval { font-family:var(--dp); font-size:17px; font-weight:700; }
+</style>
+</head>
+<body>
+
+<nav class="nav-dots" id="navDots" aria-label="섹션 탐색"></nav>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━
+     01  COVER
+━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="s0">
+  <div class="bg-img" style="background-image:url('assets/generated/25_a_wide_cinematic_storyboard_like_composite_image.png'); opacity:.2;"></div>
+  <div class="ov"></div>
+
+  <!-- Waveform background decoration -->
+  <div class="wv-bg">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,60 C120,20 240,100 360,60 C480,20 600,100 720,60 C840,20 960,100 1080,60 C1200,20 1320,100 1440,60 L1440,120 L0,120 Z" fill="#1DB954"/>
+    </svg>
+  </div>
+
+  <div class="content" style="text-align:center;">
+
+    <!-- EQ bars + label row -->
+    <div class="a-up d0 go" style="display:flex; align-items:center; justify-content:center; margin-bottom:40px;">
+      <span class="badge bg-g" style="font-size:13px; padding:10px 24px; letter-spacing:0.1em; border-width:1.5px;">ARTIST GOODS PARTNERSHIP · 2025</span>
+    </div>
+
+    <h1 class="a-up d1">
+      아티스트님이<br>
+      <span class="green">손해볼 이유가</span><br>
+      단 하나도 없습니다.
+    </h1>
+
+    <p class="lead a-up d2" style="margin:0 auto 40px; max-width:640px;">
+      초기 비용 0원 · 재고 리스크 0원 · 실패해도 손실 0원<br>
+      성공하면 매출의 <strong class="white">30%가 아티스트 통장</strong>으로 들어옵니다.
+    </p>
+
+    <div class="stat-bar a-up d3">
+      <div class="sbi"><div class="sbn green" data-count-prefix="₩" data-count="0">₩0</div><div class="sbs">초기 투자</div></div>
+      <div class="sbi"><div class="sbn green">30%</div><div class="sbs">아티스트 정산율</div></div>
+      <div class="sbi"><div class="sbn white" data-count="6">6</div><div class="sbs">전국 직영 매장</div></div>
+      <div class="sbi"><div class="sbn white" data-count="0">0</div><div class="sbs">재고 리스크</div></div>
+    </div>
+
+  </div>
+  <div class="scroll-hint">scroll ↓</div>
+</section>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━
+     02  PAIN POINTS
+━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="s1">
+  <div class="ov ov-s"></div>
+  <div class="content">
+    <span class="label a-left">The Problem · 아티스트의 현실</span>
+    <h2 class="a-left d1">굿즈를 원하는 팬이 있어도<br>시작조차 못 하는 <span class="green">3가지 장벽</span></h2>
+    <p class="lead a-left d2" style="margin-bottom:44px;">수요가 있다는 걸 알면서도, 대부분의 아티스트는 여기서 멈춥니다.</p>
+
+    <div class="g3">
+      <div class="card a-up d1" style="position:relative; overflow:hidden;">
+        <span class="ghost-n">01</span>
+        <div style="position:relative;">
+          <div style="font-family:var(--dp); font-size:44px; font-weight:800; color:rgba(255,255,255,.2); line-height:1; margin-bottom:14px;">₩30M+</div>
+          <h3 class="white" style="font-size:19px; margin-bottom:10px;">수천만 원의 선투자</h3>
+          <p class="desc">금형비 1,500~3,000만 원, 샘플비, 초도물량 2,000개. 팔릴지 모른 채 아티스트가 전액 선납해야 합니다.</p>
+          <div style="margin-top:18px; padding:10px 14px; background:rgba(29,185,84,.06); border-radius:6px; border-left:2px solid var(--g);">
+            <p style="font-size:13px; color:var(--t3);">실패 시 → <strong class="green">전액 아티스트 부담</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card a-up d2" style="position:relative; overflow:hidden;">
+        <span class="ghost-n">02</span>
+        <div style="position:relative;">
+          <div style="font-family:var(--dp); font-size:44px; font-weight:800; color:rgba(255,255,255,.2); line-height:1; margin-bottom:14px;">5,000개</div>
+          <h3 class="white" style="font-size:19px; margin-bottom:10px;">MOQ의 벽</h3>
+          <p class="desc">업계 최소 주문 수량. 팬덤 500명이라면? 소규모 팬덤으로는 구조적으로 진입 자체가 불가능합니다.</p>
+          <div style="margin-top:18px; padding:10px 14px; background:rgba(29,185,84,.06); border-radius:6px; border-left:2px solid var(--g);">
+            <p style="font-size:13px; color:var(--t3);">남은 재고 → <strong class="green">창고비 + 관리비 추가</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card accent a-up d3" style="position:relative; overflow:hidden;">
+        <span class="ghost-n" style="color:rgba(29,185,84,.04);">03</span>
+        <div style="position:relative;">
+          <div style="font-family:var(--dp); font-size:44px; font-weight:800; color:rgba(29,185,84,.25); line-height:1; margin-bottom:14px;">?</div>
+          <h3 class="white" style="font-size:19px; margin-bottom:10px;">예측 불가능한 리스크</h3>
+          <p class="desc">제작 완료 후 트렌드가 변한다면? 쌓인 재고 비용은 전액 아티스트 몫입니다.</p>
+          <div style="margin-top:18px; padding:10px 14px; background:rgba(29,185,84,.1); border-radius:6px; border:1px solid rgba(29,185,84,.25);">
+            <p style="font-size:13px; color:var(--g);">→ 마이미니미는 이 3가지를 모두 제거했습니다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━
+     03  SOLUTION
+━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="s2">
+  <div class="ov ov-s"></div>
+  <div class="content">
+    <span class="label a-left">Our Solution · 구조 자체를 바꿉니다</span>
+    <div class="g2" style="gap:72px; align-items:start;">
+
+      <div class="a-left d1">
+        <h2 style="margin-bottom:18px;">아티스트가<br>해야 할 일은<br><span class="green">딱 하나입니다.</span></h2>
+        <div class="gline"></div>
+        <div style="padding:18px 22px; background:rgba(29,185,84,.08); border:1px solid rgba(29,185,84,.22); border-radius:12px; margin-bottom:24px;">
+          <div style="font-family:var(--dp); font-size:21px; font-weight:800; color:#fff; margin-bottom:4px;">SNS 공지 포스팅 1회</div>
+          <p class="desc" style="font-size:14px;">선주문 오픈 소식을 팬들에게 알리는 것. 이게 전부입니다.</p>
+        </div>
+        <p style="font-size:12px; color:var(--t3); margin-bottom:14px; letter-spacing:.05em;">마이미니미가 대신 처리하는 것들</p>
+        <div>
+          <div class="sk"><div class="cx">✕</div><span style="font-size:15px; color:var(--t2);">기획, 3D 모델링, 샘플 제작</span></div>
+          <div class="sk"><div class="cx">✕</div><span style="font-size:15px; color:var(--t2);">품질 검수(QC), 포장, 배송</span></div>
+          <div class="sk"><div class="cx">✕</div><span style="font-size:15px; color:var(--t2);">고객 CS, 환불 처리</span></div>
+          <div class="sk"><div class="cx">✕</div><span style="font-size:15px; color:var(--t2);">전국 6개 매장 입점 및 재고 관리</span></div>
+          <div class="sk" style="border:none;"><div class="cx">✕</div><span style="font-size:15px; color:var(--t2);">수익 자동 정산 운영</span></div>
+        </div>
+      </div>
+
+      <div class="a-right d2">
+        <div style="background:var(--s1); border-radius:12px; overflow:hidden; border:1px solid var(--bd);">
+          <table class="track-list">
+            <thead><tr><th>비교 항목</th><th>기존 금형 업체</th><th style="color:var(--g);">마이미니미</th></tr></thead>
+            <tbody>
+              <tr><td>초기 투자</td><td class="d">₩1,500~3,000만원</td><td class="g">₩ 0 원</td></tr>
+              <tr><td>최소 주문</td><td class="d">5,000개 이상</td><td class="g">제한 없음</td></tr>
+              <tr><td>재고 리스크</td><td class="d">100% 아티스트</td><td class="g">마이미니미 부담</td></tr>
+              <tr><td>CS / 배송</td><td class="d">직접 처리</td><td class="g">전담 팀</td></tr>
+              <tr><td>매장 유통</td><td class="d">직접 섭외</td><td class="g">6개 직영점</td></tr>
+              <tr class="hi"><td style="font-weight:700;">아티스트 수익</td><td class="d">마진 불명확</td><td style="color:var(--g); font-size:19px; font-weight:800;">매출 30% 보장</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:12px; color:var(--t3); margin-top:10px; text-align:center;">* 판매 완료 익월 자동 입금</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━
+     04  PROCESS
+━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="s3">
+  <div class="ov ov-s"></div>
+  <div class="content">
+    <span class="label a-left">4-Step System · 총 8~10주</span>
+    <h2 class="a-up d1">전체 과정에서 아티스트 투입:<br><span class="green">포스팅 작성 2시간 이내.</span></h2>
+    <p class="lead a-up d2" style="margin-bottom:36px;">기획·제작·배송·CS는 마이미니미가 전담합니다.</p>
+
+    <div class="proc-line" id="procLine"></div>
+
+    <div class="g4">
+      <div class="card a-up d1" style="padding:24px;">
+        <div class="label" style="font-size:10px; margin-bottom:8px;">WEEK 1–2</div>
+        <div style="font-family:var(--dp); font-size:40px; font-weight:800; color:rgba(255,255,255,.06); line-height:1; margin-bottom:12px;">01</div>
+        <h3 class="white" style="font-size:17px; margin-bottom:8px;">컨셉 협의</h3>
+        <p class="desc" style="font-size:13px;">실사형/캐릭터형 선택, 가격·채널 협의, 계약 서명. 미팅 1회.</p>
+        <div style="margin-top:auto; padding-top:18px;"><span class="badge bg-dim" style="font-size:11px;">아티스트: 미팅 1회</span></div>
+      </div>
+
+      <div class="card a-up d2" style="padding:24px;">
+        <div class="label" style="font-size:10px; margin-bottom:8px;">WEEK 3–4</div>
+        <div style="font-family:var(--dp); font-size:40px; font-weight:800; color:rgba(255,255,255,.06); line-height:1; margin-bottom:12px;">02</div>
+        <h3 class="white" style="font-size:17px; margin-bottom:8px;">선주문 오픈</h3>
+        <p class="desc" style="font-size:13px;">마이미니미가 페이지 제작. 아티스트는 SNS 공지 1개만 올립니다.</p>
+        <div style="margin-top:auto; padding-top:18px;"><span class="badge bg-g" style="font-size:11px;">아티스트: 포스팅 1개</span></div>
+      </div>
+
+      <div class="card accent a-up d3" style="padding:24px;">
+        <div class="label" style="font-size:10px; margin-bottom:8px; color:var(--g);">WEEK 4–6</div>
+        <div style="font-family:var(--dp); font-size:40px; font-weight:800; color:rgba(29,185,84,.1); line-height:1; margin-bottom:12px;">03</div>
+        <h3 class="white" style="font-size:17px; margin-bottom:8px;">수요 검증</h3>
+        <p class="desc" style="font-size:13px;">목표 달성 시 확정. 손실 0원.</p>
+        <div style="margin-top:auto; padding-top:18px;"><span class="badge bg-g" style="font-size:11px;">아티스트: 없음</span></div>
+      </div>
+
+      <div class="card a-up d4" style="padding:24px;">
+        <div class="label" style="font-size:10px; margin-bottom:8px;">WEEK 7–10</div>
+        <div style="font-family:var(--dp); font-size:40px; font-weight:800; color:rgba(255,255,255,.06); line-height:1; margin-bottom:12px;">04</div>
+        <h3 class="white" style="font-size:17px; margin-bottom:8px;">제작·배송·정산</h3>
+        <p class="desc" style="font-size:13px;">3D 출력, QC, 포장, 배송, CS 전담. 완료 후 30% 자동 입금.</p>
+        <div style="margin-top:auto; padding-top:18px;"><span class="badge bg-dim" style="font-size:11px;">아티스트: 없음</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━
+     05  DUAL CHANNEL
+━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="s4">
+  <div class="bg-img" style="background-image:url('assets/generated/08_a_clean_modern_retail_exhibition_interior_colla.png'); opacity:.4;"></div>
+  <div class="ov"></div>
+  <div class="content">
+    <span class="label a-left">Dual Channel · 온라인 + 오프라인</span>
+    <h2 class="a-left d1">온라인으로 시작해<br><span class="green">전국 6개 직영 매장</span>에<br>동시 입점됩니다.</h2>
+    <p class="lead a-left d2" style="margin-bottom:48px; max-width:640px;">두 채널이 서로를 홍보하며 수익을 극대화합니다.</p>
+
+    <div class="g2" style="gap:24px; align-items:stretch;">
+      <div class="card dark a-left d3 lg">
+        <span class="label">ONLINE · Global</span>
+        <h3 class="white" style="font-size:24px; margin-bottom:16px;">글로벌 선주문</h3>
+        <p class="desc" style="margin-bottom:28px;">일본, 미국, 동남아 팬까지. 마이미니미 글로벌 배송 인프라 그대로 활용.</p>
+        <div style="display:flex; gap:32px; margin-top:auto;">
+          <div><div style="font-family:var(--dp); font-size:36px; font-weight:800; line-height:1;">100%</div><div style="font-size:12px; color:var(--t3); margin-top:4px;">수요 기반 제작</div></div>
+          <div><div style="font-family:var(--dp); font-size:36px; font-weight:800; line-height:1;">₩0</div><div style="font-size:12px; color:var(--t3); margin-top:4px;">아티스트 물류비</div></div>
+        </div>
+      </div>
+
+      <div class="card accent a-right d3 lg">
+        <span class="label" style="color:var(--g);">OFFLINE · Local</span>
+        <h3 class="white" style="font-size:24px; margin-bottom:16px;">전국 직영 매장 입점</h3>
+        <p class="desc" style="color:rgba(255,255,255,.6); margin-bottom:28px;">6개 직영 매장 스페셜 에디션 입점. 팬사인회·이벤트 공간 지원.</p>
+        <div style="display:flex; gap:32px; margin-top:auto;">
+          <div><div style="font-family:var(--dp); font-size:36px; font-weight:800; color:var(--g); line-height:1;">6개</div><div style="font-size:12px; color:var(--t3); margin-top:4px;">전국 직영점</div></div>
+          <div><div style="font-family:var(--dp); font-size:36px; font-weight:800; color:var(--g); line-height:1;">+α</div><div style="font-size:12px; color:var(--t3); margin-top:4px;">이벤트 공간</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━
+     06  PRODUCT LINEUP
+━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="s5">
+  <div class="bg-img" style="background-image:url('assets/generated/12_a_clean_warm_toned_product_showcase_scene_with_so.png'); opacity:.3;"></div>
+  <div class="ov ov-d"></div>
+  <div class="content">
+    <div class="g2" style="gap:72px;">
+      <div>
+        <span class="label a-left">Product Lineup</span>
+        <h2 class="a-left d1" style="margin-bottom:18px;">아티스트 이미지에 맞는<br>맞춤형 굿즈</h2>
+        <p class="lead a-left d2" style="margin-bottom:32px;">팬덤과 아티스트 스타일에 따라 선택하세요.</p>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div class="card a-up d2" style="padding:22px 28px;">
+            <h3 style="color:var(--g); font-size:15px; margin-bottom:4px;">Premium Realistic · 실사형</h3>
+            <h4 class="white" style="font-size:18px; font-weight:700; margin-bottom:8px;">9 / 12 / 15cm 피규어</h4>
+            <p class="desc" style="font-size:13px;">극사실 재현. 소장 가치 최대. 추천: 트로트·배우 (3040+)</p>
+            <div style="margin-top:12px; display:flex; gap:8px;"><span class="badge bg-dim" style="font-size:11px;">₩79,000~</span><span class="badge bg-dim" style="font-size:11px;">₩198,000 (15cm)</span></div>
+          </div>
+          <div class="card a-up d3" style="padding:22px 28px;">
+            <h3 style="color:var(--g); font-size:15px; margin-bottom:4px;">IP Character · 캐릭터형</h3>
+            <h4 class="white" style="font-size:18px; font-weight:700; margin-bottom:8px;">4 / 6 / 8cm 캐릭터 피규어</h4>
+            <p class="desc" style="font-size:13px;">귀여운 일상형. 추천: 아이돌·버튜버 (1020)</p>
+            <div style="margin-top:12px;"><span class="badge bg-dim" style="font-size:11px;">₩48,000~</span></div>
+          </div>
+          <div class="card accent a-up d4" style="padding:22px 28px;">
+            <h3 style="color:var(--g); font-size:15px; margin-bottom:4px;">Full Package · 최고 수익</h3>
+            <h4 class="white" style="font-size:18px; font-weight:700; margin-bottom:8px;">피규어 + 포토북 풀세트</h4>
+            <p class="desc" style="font-size:13px;">소장 가치 + 팬심 동시 자극. 최고 마진.</p>
+            <div style="margin-top:12px;"><span class="badge bg-g" style="font-size:11px;">₩450,000 · 최고 마진</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="a-right d2" style="display:flex; align-items:center; justify-content:center;">
+        <img src="assets/yoyomi_goods.jpg" alt="아티스트 맞춤형 굿즈 패키지" style="width:100%; max-width:520px; border-radius:12px; shadow: 0 20px 40px rgba(0,0,0,0.4); object-fit:cover;">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━
+     07  PROFIT SIMULATION (러프하게)
+━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="s6">
+  <div class="ov ov-s"></div>
+  <div class="content">
+    <div class="g2" style="gap:80px; align-items:center;">
+
+      <!-- Left: big numbers -->
+      <div class="a-left d0">
+        <span class="label">Profit Simulation</span>
+        <h2 style="margin-bottom:8px;">얼마나<br>벌 수 있냐고요?</h2>
+        <p class="desc" style="font-size:15px; margin-bottom:32px;">200개 기준 (온라인 100 + 매장 100), 아티스트 손에 쥐는 돈입니다.</p>
+
+        <div id="profitBars">
+          <div class="pt">
+            <div class="pt-hd">
+              <span class="pt-name">캐릭터형 (4/6/8cm) · ₩48,000~</span>
+              <span class="pt-num" data-final="288">₩ -</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" data-w="10"></div></div>
+          </div>
+
+          <div class="pt">
+            <div class="pt-hd">
+              <span class="pt-name">15cm 실사형 · ₩198,000</span>
+              <span class="pt-num" data-final="1188">₩ -</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" data-w="44"></div></div>
+          </div>
+
+          <div class="pt hot">
+            <div class="pt-hd">
+              <span class="pt-name" style="color:#fff; font-weight:700;">🔥 풀세트 (피규어+포토북) · ₩450,000</span>
+              <span class="pt-num" data-final="2700">₩ -</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" data-w="100"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: annual callout -->
+      <div class="a-right d1">
+        <div class="card accent" style="padding:64px 48px; text-align:center; border-radius:24px; display:flex; flex-direction:column; justify-content:center;">
+          <div style="font-size:14px; color:var(--t3); margin-bottom:8px;">연 2회 반복 출시 시</div>
+          <div style="font-family:var(--dp); font-size:52px; font-weight:800; color:var(--g); line-height:1; letter-spacing:-.02em;" data-count-annual="5400">₩5,400만원+</div>
+          <div style="font-size:14px; color:var(--t3); margin-top:10px;">풀세트 기준 연간 추가 수익</div>
+
+          <div style="margin-top:32px; padding-top:28px; border-top:1px solid rgba(255,255,255,.07);">
+            <div style="font-size:13px; color:var(--t3); margin-bottom:8px;">500개 판매 시</div>
+            <div style="font-family:var(--dp); font-size:34px; font-weight:800; color:#fff; line-height:1;">₩7,875만원</div>
+            <div style="font-size:12px; color:var(--t3); margin-top:6px;">풀세트 기준 아티스트 순수익</div>
+          </div>
+
+          <div style="margin-top:28px; padding:14px 18px; background:rgba(18,18,18,.6); border-radius:8px;">
+            <p style="font-size:12px; color:var(--t3); line-height:1.6;">초기 비용·배송비·CS 전부 마이미니미 부담<br>수익은 판매 완료 익월 자동 정산</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━
+     08  GUARANTEE
+━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="s7">
+  <div class="ov ov-s"></div>
+  <div class="content">
+    <div class="g2" style="gap:88px; align-items:center;">
+      <div class="a-left d0">
+        <span class="label">Our Promise · 계약서에 명시됩니다</span>
+        <h2>아티스트를 위한<br><span class="green">3가지 보장.</span></h2>
+        <p class="lead" style="margin-top:18px; margin-bottom:36px;">구두 약속이 아닙니다.<br>모든 조항이 계약서에 명문화됩니다.</p>
+        <div class="pq">
+          「아티스트가 손해를 보는 구조라면,<br>우리도 성장할 수 없습니다.」
+          <div style="margin-top:10px; font-size:13px; font-style:normal; color:var(--t3);">— 마이미니미 파트너십 원칙</div>
+        </div>
+      </div>
+
+      <div class="a-right d1">
+        <div class="gr">
+          <div class="gi">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          </div>
+          <div>
+            <h3 class="white" style="font-size:20px; margin-bottom:7px;">리스크 제로 보장</h3>
+            <p class="desc" style="font-size:14px;">선주문 목표 미달 시 팬들에게 100% 전액 환불. 아티스트에게 발생하는 비용은 <strong class="white">단 1원도 없습니다.</strong> 계약서 명시.</p>
+          </div>
+        </div>
+        <div class="gr">
+          <div class="gi">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          </div>
+          <div>
+            <h3 class="white" style="font-size:20px; margin-bottom:7px;">매출 30% 자동 정산</h3>
+            <p class="desc" style="font-size:14px;">판매 금액의 30%는 조건 없이 아티스트에게 귀속. 숨겨진 수수료 없음. <strong class="white">익월 자동 입금.</strong></p>
+          </div>
+        </div>
+        <div class="gr">
+          <div class="gi">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+          </div>
+          <div>
+            <h3 class="white" style="font-size:20px; margin-bottom:7px;">크리에이티브 통제권 유지</h3>
+            <p class="desc" style="font-size:14px;">아티스트가 <strong class="white">최종 샘플을 승인해야만</strong> 제작 시작. 수정 요청 가능. IP 권리는 아티스트에게 있습니다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━
+     09  CTA
+━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="s8">
+  <div class="bg-img" style="background-image:url('assets/generated/27_a_wide_luxurious_hotel_lobby_scene_with_warm_ambi.png'); opacity:.22;"></div>
+  <div class="ov"></div>
+  <div class="content" style="text-align:center;">
+
+    <div class="a-up d0" style="display:flex; align-items:center; justify-content:center; margin-bottom:36px;">
+      <span class="badge bg-g" style="font-size:13px; padding:10px 24px; letter-spacing:0.1em; display:inline-flex; align-items:center;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-right:8px;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+        2025 Q3 파트너 모집 · 소수 정예
+      </span>
+    </div>
+
+    <h1 class="a-up d1" style="font-size:66px; margin-bottom:20px; letter-spacing:-.03em;">
+      지금 문의하는<br>아티스트가<br><span class="green">시장을 선점합니다.</span>
+    </h1>
+
+    <p class="lead a-up d2" style="margin:0 auto 40px; max-width:560px;">
+      비용도 리스크도 없는 이 제안에<br>거절할 이유가 있나요?
+    </p>
+
+    <div class="scar-w a-up d3">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:13px; color:var(--t3);">이번 분기 잔여 슬롯</span>
+        <span style="font-family:var(--dp); font-size:15px; font-weight:800; color:var(--g);">2 / 5 남음</span>
+      </div>
+      <div class="scar-t"><div class="scar-f" id="scarFill"></div></div>
+      <p style="font-size:11px; color:var(--t3);">3팀이 이미 협약 진행 중</p>
+    </div>
+
+    <div class="a-up d4" style="display:flex; gap:14px; justify-content:center; margin-bottom:56px; flex-wrap:wrap;">
+      <a href="mailto:contact@myminimy.com" class="btn-p">무료 상담 시작하기 →</a>
+      <a href="https://www.myminimy.com" class="btn-s">포트폴리오 보기</a>
+    </div>
+
+    <div class="contact-row a-up d5">
+      <div><div class="clbl">EMAIL</div><div class="cval">myminime1943@gmail.com</div></div>
+      <div><div class="clbl">WEBSITE</div><div class="cval">www.myminime-studio.com</div></div>
+      <div><div class="clbl">INSTAGRAM</div><div class="cval">@mymini.me_</div></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  const sections = Array.from(document.querySelectorAll('section'));
+  const nav = document.getElementById('navDots');
+
+  // ── Nav dots ──
+  sections.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', '섹션 ' + (i + 1));
+    d.addEventListener('click', () => sections[i].scrollIntoView({ behavior: 'smooth' }));
+    nav.appendChild(d);
+  });
+  const dots = Array.from(nav.querySelectorAll('.nav-dot'));
+
+  // ── Section active tracking ──
+  new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const i = sections.indexOf(e.target);
+        dots.forEach((d, j) => d.classList.toggle('active', i === j));
+      }
+    });
+  }, { threshold: 0.5 }).observe === undefined || (() => {
+    const o = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const i = sections.indexOf(e.target);
+          dots.forEach((d, j) => d.classList.toggle('active', i === j));
+        }
+      });
+    }, { threshold: 0.5 });
+    sections.forEach(s => o.observe(s));
+  })();
+
+  // ── Entrance animations ──
+  const animObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('go'); animObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.a-up, .a-left, .a-right, .a-zoom').forEach(el => {
+    // Elements with 'go' already (cover section) skip
+    if (!el.classList.contains('go')) animObs.observe(el);
+  });
+
+  // ── Process line ──
+  const procObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('go'); procObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.3 });
+  const pl = document.getElementById('procLine');
+  if (pl) procObs.observe(pl);
+
+  // ── Section tracking (separate from dots) ──
+  const secObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const i = sections.indexOf(e.target);
+      dots.forEach((d, j) => d.classList.toggle('active', i === j));
+
+      // Trigger profit bars when s6 is in view
+      if (e.target.id === 's6') triggerProfitBars();
+      // Trigger scarcity bar when s8
+      if (e.target.id === 's8') {
+        const sf = document.getElementById('scarFill');
+        if (sf) sf.style.width = '60%';
+      }
+    });
+  }, { threshold: 0.5 });
+  sections.forEach(s => secObs.observe(s));
+
+  // ── Profit bars animation ──
+  let profitDone = false;
+  function triggerProfitBars() {
+    if (profitDone) return;
+    profitDone = true;
+
+    document.querySelectorAll('.bar-fill').forEach(bar => {
+      const w = bar.dataset.w;
+      setTimeout(() => { bar.style.width = w + '%'; }, 200);
+    });
+
+    document.querySelectorAll('.pt-num[data-final]').forEach(el => {
+      const target = parseInt(el.dataset.final, 10);
+      let start = null;
+      const dur = 1200;
+      function step(ts) {
+        if (!start) start = ts;
+        const prog = Math.min((ts - start) / dur, 1);
+        const ease = 1 - Math.pow(1 - prog, 3);
+        const val = Math.floor(ease * target);
+        el.textContent = '₩' + val.toLocaleString() + '만원';
+        if (prog < 1) requestAnimationFrame(step);
+      }
+      setTimeout(() => requestAnimationFrame(step), 400);
+    });
+  }
+
+  // Cover animations — trigger immediately
+  document.querySelectorAll('#s0 .a-up, #s0 .a-left, #s0 .a-right').forEach(el => {
+    el.classList.add('go');
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyMiniMe Studio · Visual Pitch Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<!-- 폰트는 Pretendard와 Plus Jakarta Sans 조합을 사용 -->
+<style>
+  @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css");
+
+  :root {
+    --coral: #FF385C;
+    --coral-light: #FF5A79;
+    --ink: #111111;
+    --ink-light: #222222;
+    --display: 'Plus Jakarta Sans', sans-serif;
+    --body: 'Pretendard', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--body);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+  }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--ink); }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+
+  /* ── Scan CTA Overlay ── */
+  #scan-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(17,17,17,0.96);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  #scan-overlay.active { opacity: 1; pointer-events: all; }
+
+  #scan-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--coral) 40%, var(--coral) 60%, transparent);
+    box-shadow: 0 0 24px var(--coral), 0 0 60px rgba(255,56,92,0.35);
+    top: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  #scan-line::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; top: -80px;
+    height: 80px;
+    background: linear-gradient(to top, rgba(255,56,92,0.07), transparent);
+    pointer-events: none;
+  }
+  #scan-line.scanning {
+    opacity: 1;
+    animation: scanDown 0.95s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  @keyframes scanDown { 0%{top:0%} 100%{top:100%} }
+
+  #scan-status {
+    position: absolute;
+    top: 44px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    color: var(--coral);
+    opacity: 0;
+    transition: opacity 0.25s;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  #scan-status.visible { opacity: 1; }
+
+  #scan-progress {
+    position: absolute;
+    top: 74px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--display);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.35);
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  #scan-progress.visible { opacity: 1; }
+
+  /* Grid lines decoration — purely visual, never intercept clicks */
+  #scan-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,56,92,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,56,92,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+  #scan-overlay.active #scan-grid { opacity: 1; }
+
+  /* Contact card — z-index: 1 ensures it sits above all absolute-positioned siblings */
+  #contact-card {
+    position: relative;
+    z-index: 1;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(255,56,92,0.25);
+    border-radius: 24px;
+    padding: 52px 64px;
+    min-width: 380px;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  #contact-card.revealed { opacity: 1; pointer-events: all; }
+
+  .card-layer {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .card-layer.show { opacity: 1; transform: translateY(0); }
+
+  .scan-badge {
+    display: inline-block;
+    font-family: var(--display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--coral);
+    border: 1px solid rgba(255,56,92,0.5);
+    border-radius: 20px;
+    padding: 5px 16px;
+    margin-bottom: 32px;
+  }
+  .card-name {
+    font-family: var(--display);
+    font-size: 44px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  .card-role {
+    font-size: 14px;
+    color: rgba(255,255,255,0.38);
+    letter-spacing: 0.06em;
+    margin-bottom: 36px;
+  }
+  .card-divider { height: 1px; background: rgba(255,255,255,0.08); margin-bottom: 36px; }
+  .card-contact { display: flex; flex-direction: column; gap: 18px; margin-bottom: 44px; }
+  .card-contact a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 17px;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    transition: color 0.2s;
+    letter-spacing: 0.02em;
+  }
+  .card-contact a:hover { color: var(--coral); }
+  .card-contact .ci { font-size: 15px; color: var(--coral); }
+
+  #scan-close {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    color: rgba(255,255,255,0.35);
+    font-family: var(--display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  #scan-close:hover { border-color: rgba(255,255,255,0.35); color: rgba(255,255,255,0.7); }
+
+  @media (prefers-reduced-motion: reduce) {
+    #scan-line { display: none; }
+    .card-layer { transition: none; }
+  }
+
+  section {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    scroll-snap-align: start;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .bg-image {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+    transform: scale(1.02);
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to top, rgba(17,17,17,0.95) 0%, rgba(17,17,17,0.5) 50%, rgba(17,17,17,0.85) 100%);
+    z-index: 2;
+  }
+  .overlay-dark { background: rgba(17,17,17,0.8); }
+  .overlay-solid { background: var(--ink); }
+
+  .content {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    max-width: 1440px;
+    padding: 0 80px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .content.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Typography */
+  h1 { font-family: var(--display); font-size: 82px; font-weight: 800; line-height: 1.15; margin-bottom: 24px; letter-spacing: -0.02em; word-break: keep-all; }
+  h2 { font-size: 56px; font-weight: 700; line-height: 1.25; margin-bottom: 24px; word-break: keep-all; }
+  h3 { font-size: 32px; font-weight: 600; margin-bottom: 16px; color: var(--coral); }
+  p.lead { font-size: 24px; font-weight: 400; line-height: 1.6; color: rgba(255,255,255,0.85); max-width: 800px; word-break: keep-all; }
+  p.desc { font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.6); word-break: keep-all; }
+  
+  .label { font-family: var(--display); font-size: 14px; font-weight: 700; letter-spacing: 0.15em; color: var(--coral); margin-bottom: 24px; display: block; }
+  .coral { color: var(--coral); }
+
+  /* Layouts */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+
+  .image-box { border-radius: 24px; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.5); }
+  .image-box img { width: 100%; height: auto; display: block; }
+
+  /* Glassmorphism Cards */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 48px;
+    transition: transform 0.3s;
+  }
+  .glass-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.05); }
+  
+  .metric { font-family: var(--display); font-size: 64px; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 16px; }
+
+  /* Table styling */
+  .table-row {
+    display: grid; grid-template-columns: 2fr 2fr 2fr 1fr; gap: 24px;
+    padding: 24px 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .table-row.header { font-family: var(--display); font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; border-bottom: 2px solid rgba(255,255,255,0.2); }
+  .table-row.highlight { background: rgba(255, 56, 92, 0.05); border-bottom-color: var(--coral); }
+  
+  /* Navigation Hint */
+  .scroll-hint {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 10;
+    color: rgba(255,255,255,0.5); font-size: 14px; letter-spacing: 0.1em; font-family: var(--display);
+    animation: bounce 2s infinite; pointer-events: none;
+  }
+  @keyframes bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 10px); } }
+
+  /* Slide indicator */
+  .slide-num { position: absolute; top: 40px; left: 80px; font-family: var(--display); font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.3); z-index: 10; letter-spacing: 0.1em; }
+
+  /* ── Tablet (641px – 1024px) ── */
+  @media (max-width: 1024px) {
+    .content { padding: 0 48px; }
+    h1 { font-size: 54px; }
+    h2 { font-size: 38px; }
+    .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .glass-card { padding: 32px; }
+    .metric { font-size: 48px; }
+    .slide-num { left: 48px; }
+    #contact-card { padding: 40px 44px; }
+  }
+
+  /* ── Mobile (≤ 640px) ── */
+  @media (max-width: 640px) {
+    body { scroll-snap-type: y mandatory; }
+
+    section {
+      height: 100vh;
+      height: 100svh;
+      align-items: flex-start;
+      padding-top: 56px;
+    }
+
+    .content { padding: 0 20px 52px; }
+
+    h1 { font-size: clamp(1.5rem, 6.5vw, 2.2rem); line-height: 1.2; margin-bottom: 12px; }
+    h2 { font-size: clamp(1.2rem, 5.5vw, 1.8rem); line-height: 1.2; margin-bottom: 12px; }
+    h3 { font-size: 16px; margin-bottom: 8px; }
+    p.lead { font-size: 14px; line-height: 1.55; max-width: 100%; }
+    p.desc { font-size: 13px; line-height: 1.5; }
+    .label { font-size: 10px; letter-spacing: 0.12em; margin-bottom: 12px; }
+
+    .grid-2,
+    .grid-3 { grid-template-columns: 1fr; gap: 12px; }
+    .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+
+    .glass-card { padding: 16px 18px; border-radius: 16px; }
+    .glass-card:hover { transform: none; }
+
+    .metric { font-size: 34px; margin-bottom: 6px; }
+
+    .slide-num { left: 20px; top: 18px; font-size: 11px; }
+    .scroll-hint { bottom: 14px; font-size: 11px; }
+
+    /* Hide decorative image boxes in 2-col layouts */
+    .grid-2 .image-box { display: none; }
+
+    /* Override inline margin-top: 64px on grids within content */
+    .content .grid-3 { margin-top: 20px !important; }
+    .content .grid-4 { margin-top: 20px !important; }
+
+    /* Override inline margin-bottom: 64px on lead paragraphs */
+    .content p.lead { margin-bottom: 18px !important; }
+
+    /* Closing slide: stack stats vertically and shrink */
+    #slide-18 h1 { font-size: clamp(1.15rem, 5vw, 1.5rem) !important; margin-bottom: 14px; }
+    #slide-18 p.lead { margin-bottom: 20px !important; }
+    #slide-18 .stats-row {
+      flex-direction: column !important;
+      gap: 16px !important;
+      margin-bottom: 24px !important;
+    }
+    #slide-18 .stats-divider { width: 40px !important; height: 1px !important; }
+    #slide-18 .stat-value { font-size: 32px !important; }
+
+    #cta-btn { padding: 14px 36px !important; font-size: 15px !important; }
+
+    /* Table layout */
+    .table-row { grid-template-columns: 1fr; gap: 6px; padding: 12px 0; }
+    .table-row.header { display: none; }
+
+    /* Scan contact card overlay */
+    #contact-card {
+      min-width: unset;
+      width: calc(100% - 40px);
+      max-width: 360px;
+      padding: 32px 24px;
+      border-radius: 20px;
+    }
+    .card-name { font-size: 28px; }
+    .card-role { font-size: 12px; margin-bottom: 24px; }
+    .card-contact { gap: 14px; margin-bottom: 28px; }
+    .card-contact a { font-size: 15px; gap: 10px; }
+    #scan-status { font-size: 10px; letter-spacing: 0.2em; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- 01 Cover -->
+  <section id="slide-01">
+    <div class="bg-image" style="background-image: url('assets/generated/15_a_highly_realistic_cinematic_3d_rendered_scene_wi.png');"></div>
+    <div class="overlay"></div>
+    <div class="slide-num">01 / 18</div>
+    <div class="content" style="text-align: center;">
+      <span class="label">INVESTMENT PITCH DECK</span>
+      <h1>사람의 디지털 자산을 보관하고<br><span class="coral">재사용하게 만드는 회사</span></h1>
+      <p class="lead" style="margin: 0 auto;">
+        MyMiniMe Studio는 현실의 기억을 피규어로 남기고,<br>
+        이를 3D 디지털 트윈으로 전환해 영구적인 가치를 창출합니다.
+      </p>
+    </div>
+    <div class="scroll-hint">SCROLL DOWN ↓</div>
+  </section>
+
+  <!-- 02 Thesis -->
+  <section id="slide-02">
+    <div class="bg-image" style="background-image: url('assets/generated/21_a_warm_softly_lit_collage_montage_style_photograp.png'); opacity: 0.4;"></div>
+    <div class="overlay overlay-dark"></div>
+    <div class="slide-num">02 / 18</div>
+    <div class="content">
+      <span class="label">INVESTMENT THESIS</span>
+      <h2>우리는 "사진 다음의<br>기억 방식"을 만듭니다</h2>
+      <p class="lead" style="margin-bottom: 40px;">
+        사람들은 피규어를 사는 것이 아니라, 다시 꺼내볼 수 있는 <strong>지금의 나와 관계</strong>를 삽니다.<br>
+        하지만 기존 3D 데이터는 "한 번 만들고 한 번 쓰고 끝"이라는 한계가 있었습니다.
+      </p>
+      <div class="glass-card" style="display: inline-block;">
+        <h3>MyMiniMe의 구조적 피벗</h3>
+        <p class="desc">단발성 제조 방식에서 벗어나, 감정적 연결고리를 기반으로<br>데이터 생성 및 재사용 생태계로 패러다임을 전환합니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 Empathize -->
+  <section id="slide-03">
+    <div class="bg-image" style="background-image: url('assets/generated/05_a_clean_minimal_softly_lit_close_up_still_life_p.png'); opacity: 0.8;"></div>
+    <div class="overlay"></div>
+    <div class="slide-num">03 / 18</div>
+    <div class="content">
+      <span class="label">EMPATHIZE</span>
+      <h2>"우리 아이가 제일 예쁠 때,<br>만질 수 있게 남길 수 없을까?"</h2>
+      <div class="grid-3" style="margin-top: 64px;">
+        <div class="glass-card">
+          <h3 style="color: #fff; font-size: 24px;">Family</h3>
+          <p class="desc">"부모님의 건강한 모습을 평면 사진이 아닌, 공간감이 느껴지는 입체로 보관하고 싶다."</p>
+        </div>
+        <div class="glass-card">
+          <h3 style="color: #fff; font-size: 24px;">Pet</h3>
+          <p class="desc">"반려견이 떠난 후에도 쓰다듬고 교감할 수 있는 실물과 3D 아바타가 있었으면 좋겠다."</p>
+        </div>
+        <div class="glass-card">
+          <h3 style="color: #fff; font-size: 24px;">Wedding</h3>
+          <p class="desc">"우리의 가장 빛나는 순간을 액자를 넘어 트로피처럼 입체적으로 간직하고 싶다."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Define -->
+  <section id="slide-04">
+    <div class="bg-image"></div>
+    <div class="overlay overlay-solid"></div>
+    <div class="slide-num">04 / 18</div>
+    <div class="content">
+      <span class="label">DEFINE</span>
+      <h2>고객은 원하지만,<br>기존 산업이 풀지 못한 <span class="coral">3가지 한계</span></h2>
+      <div class="grid-3" style="margin-top: 64px;">
+        <div>
+          <div class="metric">15<span style="font-size: 24px;">%</span></div>
+          <h3 style="font-size: 22px; color: #fff;">높은 클레임률 (정확도)</h3>
+          <p class="desc">평면 사진 기반의 수작업 모델링은 고객의 기대치를 맞추기 어렵고 반복적인 수정과 높은 불만족을 야기합니다.</p>
+        </div>
+        <div>
+          <div class="metric">3<span style="font-size: 24px;">주</span></div>
+          <h3 style="font-size: 22px; color: #fff;">수작업 병목 (리드타임)</h3>
+          <p class="desc">주문부터 배송까지 3주 이상 소요되는 100% 수작업 프로세스로는 스케일업(Scale-up)이 불가능합니다.</p>
+        </div>
+        <div>
+          <div class="metric">0<span style="font-size: 24px;">원</span></div>
+          <h3 style="font-size: 22px; color: #fff;">휘발되는 데이터 (수익성)</h3>
+          <p class="desc">비싸게 만든 3D 에셋이 일회성 출력으로 끝납니다. 데이터 재사용을 통한 후속 LTV 창출 모델이 부재합니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 Reframe -->
+  <section id="slide-06">
+    <div class="bg-image" style="background-image: url('assets/generated/07_a_clean_modern_interior_product_experience_scene.png');"></div>
+    <div class="overlay"></div>
+    <div class="slide-num">05 / 18</div>
+    <div class="content">
+      <span class="label">REFRAME</span>
+      <h2>본질은 피규어 제조가 아니라<br><span class="coral">오프라인 3D 스캔 네트워크</span>입니다</h2>
+      <p class="lead" style="margin-bottom: 64px;">
+        42대 카메라 동시 촬영으로 현실의 사람과 반려동물을<br>
+        0.1초 만에 3D 데이터로 변환하는 고객 접점이 이미 구축되어 있습니다.
+      </p>
+      <div class="grid-3">
+        <div class="glass-card">
+          <div class="metric">0.1<span style="font-size: 32px">s</span></div>
+          <h3 style="font-size: 20px; color: #fff;">360° 순간 캡처</h3>
+          <p class="desc">움직임 블러 없는 정밀 스캔</p>
+        </div>
+        <div class="glass-card">
+          <div class="metric">6<span style="font-size: 32px">+</span></div>
+          <h3 style="font-size: 20px; color: #fff;">전국 오프라인 거점</h3>
+          <p class="desc">서울·수도권 중심 매장/팝업</p>
+        </div>
+        <div class="glass-card">
+          <div class="metric">2-3<span style="font-size: 32px">w</span></div>
+          <h3 style="font-size: 20px; color: #fff;">안정화된 리드타임</h3>
+          <p class="desc">촬영→모델링→출력 자동화</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 Solution -->
+  <section id="slide-07">
+    <div class="bg-image" style="background-image: url('assets/generated/02_a_clean_high_end_3d_render_infographic_style_sc.png'); opacity: 0.3;"></div>
+    <div class="overlay overlay-dark"></div>
+    <div class="slide-num">06 / 18</div>
+    <div class="content">
+      <div class="grid-2">
+        <div>
+          <span class="label">SOLUTION</span>
+          <h2>단 0.1초의 스캔,<br>무한한 확장</h2>
+          <p class="lead" style="margin-bottom: 32px;">
+            고객은 순간의 기억을 캡처하고,<br>
+            우리는 완벽한 3D 디지털 자산을 확보합니다.
+          </p>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 16px;">
+            <li style="font-size: 20px; color: #fff;">▸ <strong>Capture:</strong> 42대 카메라로 0.1초 찰나의 표정까지 동기화 스캔</li>
+            <li style="font-size: 20px; color: #fff;">▸ <strong>Generate:</strong> AI 보정 파이프라인으로 메쉬와 텍스처 최적화</li>
+            <li style="font-size: 20px; color: #fff;">▸ <strong>Deliver:</strong> 초정밀 3D 프린팅 및 수작업 후처리로 실물 제공</li>
+          </ul>
+        </div>
+        <div class="image-box">
+          <img src="assets/generated/02_a_clean_high_end_3d_render_infographic_style_sc.png" alt="Workflow">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 Product Ladder -->
+  <section id="slide-09">
+    <div class="bg-image" style="background-image: url('assets/generated/12_a_clean_warm_toned_product_showcase_scene_with_so.png'); opacity: 0.3;"></div>
+    <div class="overlay overlay-dark"></div>
+    <div class="slide-num">07 / 18</div>
+    <div class="content">
+      <div class="grid-2">
+        <div class="image-box">
+          <img src="assets/generated/12_a_clean_warm_toned_product_showcase_scene_with_so.png" alt="Product Hierarchy">
+        </div>
+        <div>
+          <span class="label">PRODUCT LADDER</span>
+          <h2>하나의 스캔,<br>확장되는 제품 라인업</h2>
+          <p class="lead" style="margin-bottom: 40px;">
+            엔트리 상품으로 진입 장벽을 낮추고,<br>프리미엄 실물과 디지털 자산으로 LTV를 극대화합니다.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 24px;">
+            <div class="glass-card" style="padding: 24px;">
+              <h3 style="font-size: 18px; margin-bottom: 8px;">1. ENTRY (가벼운 시도)</h3>
+              <p class="desc">키링, 스탠드 등 접근성 높은 굿즈 (5만 원대)</p>
+            </div>
+            <div class="glass-card" style="padding: 24px;">
+              <h3 style="font-size: 18px; margin-bottom: 8px;">2. PREMIUM (강렬한 기억)</h3>
+              <p class="desc">웨딩, 가족, 반려견 정밀 피규어 (20~40만 원대)</p>
+            </div>
+            <div class="glass-card" style="padding: 24px;">
+              <h3 style="font-size: 18px; margin-bottom: 8px; color: var(--coral)">3. DIGITAL (데이터 재사용)</h3>
+              <p class="desc">3D 메타버스 아바타, 증강현실(AR) 스튜디오 자산</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 GTM -->
+  <section id="slide-10">
+    <div class="bg-image" style="background-image: url('assets/generated/08_a_clean_modern_retail_exhibition_interior_colla.png');"></div>
+    <div class="overlay"></div>
+    <div class="slide-num">08 / 18</div>
+    <div class="content">
+      <span class="label">GO-TO-MARKET</span>
+      <h2>감정 강도가 가장 높은 공간에<br><span class="coral">B2B2C 파트너십</span>으로 진입합니다</h2>
+      <p class="lead" style="margin-bottom: 64px;">
+        웨딩홀, 5성급 호텔, 프리미엄 백화점 공간에 진입하여<br>고객 획득 비용(CAC)을 절감하고 데이터 재사용 습관을 만듭니다.
+      </p>
+      <div class="grid-3">
+        <div class="glass-card">
+          <h3 style="font-size: 20px; color: #fff;">가족·반려동물 (B2C)</h3>
+          <p class="desc">자사 매장 및 온라인 예약을 통한 특별한 일상의 기록</p>
+        </div>
+        <div class="glass-card" style="border-color: var(--coral);">
+          <h3 style="font-size: 20px; color: #fff;">웨딩·호텔·백화점 (B2B2C)</h3>
+          <p class="desc">고관여 프리미엄 채널과의 제휴 팝업. CAC 획기적 절감</p>
+        </div>
+        <div class="glass-card">
+          <h3 style="font-size: 20px; color: #fff;">메타버스·AR (Digital)</h3>
+          <p class="desc">Roblox, ZEPETO 등 가상 세계로의 3D 에셋 확장</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 Moat -->
+  <section id="slide-13">
+    <div class="bg-image" style="background-image: url('assets/generated/13_a_clean_well_lit_product_process_infographic_imag.png'); opacity: 0.2;"></div>
+    <div class="overlay overlay-dark"></div>
+    <div class="slide-num">09 / 18</div>
+    <div class="content">
+      <div class="grid-2">
+        <div>
+          <span class="label">ECONOMIC MOAT</span>
+          <h2>압도적 마진을 창출하는<br><span class="coral">데이터 플라이휠</span></h2>
+          <p class="lead" style="margin-bottom: 40px;">
+            제조 원가는 첫 구매에만 발생합니다.<br>
+            확보된 3D 데이터로 파생 상품을 만들수록<br>
+            한계 비용은 '0'에 수렴하고 마진은 90%까지 치솟습니다.
+          </p>
+        </div>
+        <div class="image-box">
+          <img src="assets/generated/13_a_clean_well_lit_product_process_infographic_imag.png" alt="Data Flywheel">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 OS -->
+  <section id="slide-14">
+    <div class="bg-image" style="background-image: url('assets/generated/28_a_wide_ultra_clean_modern_industrial_lab_producti.png'); opacity: 0.4;"></div>
+    <div class="overlay overlay-dark"></div>
+    <div class="slide-num">10 / 18</div>
+    <div class="content" style="text-align: center;">
+      <span class="label">OPERATING SYSTEM</span>
+      <h2>주문이 아닌 <span class="coral">소프트웨어</span>로 관리합니다</h2>
+      <p class="lead" style="margin: 0 auto 64px auto;">
+        스캔 데이터 수집부터 출력, 배송까지 전 과정을 관제하는<br>자체 통합 대시보드를 구축하여 스케일업의 기반을 마련합니다.
+      </p>
+      <div class="grid-4" style="text-align: left;">
+        <div class="glass-card" style="padding: 32px;">
+          <h3 style="font-size: 18px; color: #fff;">1. CRM & Booker</h3>
+          <p class="desc" style="font-size: 15px;">온라인 예약/결제 자동화<br><span class="coral">상담 인력 60% 절감</span></p>
+        </div>
+        <div class="glass-card" style="padding: 32px;">
+          <h3 style="font-size: 18px; color: #fff;">2. Asset Pipeline</h3>
+          <p class="desc" style="font-size: 15px;">클라우드 기반 3D 모델링<br><span class="coral">리드타임 40% 단축</span></p>
+        </div>
+        <div class="glass-card" style="padding: 32px;">
+          <h3 style="font-size: 18px; color: #fff;">3. Factory Ctrl</h3>
+          <p class="desc" style="font-size: 15px;">프린터 스케줄링 API<br><span class="coral">불량률 3% 미만 달성</span></p>
+        </div>
+        <div class="glass-card" style="padding: 32px;">
+          <h3 style="font-size: 18px; color: #fff;">4. Data Hub</h3>
+          <p class="desc" style="font-size: 15px;">개인별 디지털 트윈 보관<br><span class="coral">재구매율 증가 유도</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16 Fundraising -->
+  <section id="slide-16">
+    <div class="bg-image"></div>
+    <div class="overlay overlay-solid"></div>
+    <div class="slide-num">11 / 18</div>
+    <div class="content">
+      <span class="label">FUNDRAISING</span>
+      <h2>18개월의 성장을 위한<br><span class="coral">₩4.5B</span> Seed 라운드</h2>
+      <p class="lead" style="margin-bottom: 64px;">
+        조달 자금은 스캔 네트워크의 B2B 파트너십 확장과<br>운영 소프트웨어 고도화에 집중 투자됩니다.
+      </p>
+      <div class="grid-3">
+        <div class="glass-card">
+          <div class="metric">35<span style="font-size: 24px">%</span></div>
+          <h3 style="font-size: 18px; color: #fff;">네트워크 확장 (₩1.58B)</h3>
+          <p class="desc">B2B 스캔 부스 증설, 거점 확대</p>
+        </div>
+        <div class="glass-card">
+          <div class="metric">40<span style="font-size: 24px">%</span></div>
+          <h3 style="font-size: 18px; color: #fff;">R&D & OS 고도화 (₩1.8B)</h3>
+          <p class="desc">통합 대시보드 구축 및 AI 파이프라인</p>
+        </div>
+        <div class="glass-card">
+          <div class="metric">25<span style="font-size: 24px">%</span></div>
+          <h3 style="font-size: 18px; color: #fff;">조직 및 마케팅 (₩1.12B)</h3>
+          <p class="desc">핵심 인재 영입 및 초기 채널 마케팅</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18 Closing -->
+  <section id="slide-18">
+    <div class="bg-image" style="background-image: url('assets/generated/27_a_wide_luxurious_hotel_lobby_scene_with_warm_ambi.png');"></div>
+    <div class="overlay"></div>
+    <div class="slide-num">12 / 12</div>
+    <div class="content" style="text-align: center;">
+      <h1 style="font-size: 64px; margin-bottom: 32px;">피규어 회사가 아니라,<br>사람의 3D 자산을 보관하고<br>재사용하게 만드는 회사</h1>
+      <p class="lead" style="margin: 0 auto 56px auto;">
+        기억을 사는 고객 접점에서 출발해,<br>실물 굿즈와 디지털 트윈을 동시에 확장합니다.
+      </p>
+      
+      <div class="stats-row" style="display: flex; gap: 48px; justify-content: center; margin-bottom: 64px; align-items: center;">
+        <div>
+          <div class="stat-value" style="font-family: var(--display); font-size: 48px; font-weight: 800; color: var(--coral);">₩4.5B</div>
+          <div style="font-size: 16px; color: rgba(255,255,255,0.4); margin-top: 8px;">Seed / Pre-A</div>
+        </div>
+        <div class="stats-divider" style="width: 1px; height: 60px; background: rgba(255,255,255,0.2);"></div>
+        <div>
+          <div class="stat-value" style="font-family: var(--display); font-size: 48px; font-weight: 800; color: var(--coral);">6+</div>
+          <div style="font-size: 16px; color: rgba(255,255,255,0.4); margin-top: 8px;">오프라인 거점</div>
+        </div>
+        <div class="stats-divider" style="width: 1px; height: 60px; background: rgba(255,255,255,0.2);"></div>
+        <div>
+          <div class="stat-value" style="font-family: var(--display); font-size: 48px; font-weight: 800; color: var(--coral);">4L</div>
+          <div style="font-size: 16px; color: rgba(255,255,255,0.4); margin-top: 8px;">Platform Layers</div>
+        </div>
+      </div>
+
+      <a href="#" id="cta-btn" style="display: inline-block; padding: 20px 56px; background: var(--coral); color: #fff; text-decoration: none; border-radius: 12px; font-size: 20px; font-weight: 700; letter-spacing: 0.05em; transition: all 0.3s;">CONNECT WITH US</a>
+    </div>
+  </section>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.content').forEach(el => observer.observe(el));
+  </script>
+
+  <!-- Scan CTA -->
+  <script>
+  (function () {
+    // Inject overlay HTML
+    const overlay = document.createElement('div');
+    overlay.id = 'scan-overlay';
+    overlay.innerHTML = `
+      <div id="scan-grid"></div>
+      <div id="scan-line"></div>
+      <span id="scan-status"></span>
+      <span id="scan-progress">0%</span>
+      <div id="contact-card">
+        <div class="card-layer">
+          <span class="scan-badge">● SCAN COMPLETE</span>
+        </div>
+        <div class="card-layer">
+          <div class="card-name">이건우</div>
+          <div class="card-role">Founder · MyMiniMe Studio</div>
+        </div>
+        <div class="card-layer"><div class="card-divider"></div></div>
+        <div class="card-layer">
+          <div class="card-contact">
+            <a href="https://www.myminime-studio.com" target="_blank" rel="noopener noreferrer" aria-label="홈페이지">
+              <span class="ci">🌐</span> www.myminime-studio.com
+            </a>
+            <a href="tel:01082010817" aria-label="전화 걸기">
+              <span class="ci">📱</span> 010-8201-0817
+            </a>
+            <a href="mailto:nadalgw@gmail.com" aria-label="이메일 보내기">
+              <span class="ci">✉</span> nadalgw@gmail.com
+            </a>
+          </div>
+        </div>
+        <div class="card-layer">
+          <button id="scan-close">✕ &nbsp; CLOSE</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+
+    // Shutter sound (Web Audio API synthesis)
+    function playShutter() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        [
+          { freq: 900, end: 300, dur: 0.06, vol: 0.18 },
+          { freq: 300, end: 100, dur: 0.12, vol: 0.08, delay: 0.06 }
+        ].forEach(({ freq, end, dur, vol, delay = 0 }) => {
+          const osc = ctx.createOscillator();
+          const g = ctx.createGain();
+          const t = ctx.currentTime + delay;
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(freq, t);
+          osc.frequency.exponentialRampToValueAtTime(end, t + dur);
+          g.gain.setValueAtTime(vol, t);
+          g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+          osc.connect(g); g.connect(ctx.destination);
+          osc.start(t); osc.stop(t + dur + 0.01);
+        });
+      } catch (e) {}
+    }
+
+    // Animated progress counter
+    function animateProgress(el, duration) {
+      const start = performance.now();
+      (function tick(now) {
+        const p = Math.min((now - start) / duration, 1);
+        el.textContent = Math.round(p * 100) + '%';
+        if (p < 1) requestAnimationFrame(tick);
+      })(start);
+    }
+
+    // Reveal card layers with stagger
+    function revealCard() {
+      const card = document.getElementById('contact-card');
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      card.classList.add('revealed');
+      card.querySelectorAll('.card-layer').forEach((l, i) => {
+        setTimeout(() => l.classList.add('show'), reduced ? 0 : i * 130);
+      });
+    }
+
+    // Close overlay
+    function closeOverlay() {
+      overlay.style.transition = 'opacity 0.4s ease';
+      overlay.style.opacity = '0';
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        overlay.style.cssText = '';
+        const card = document.getElementById('contact-card');
+        card.classList.remove('revealed');
+        card.querySelectorAll('.card-layer').forEach(l => l.classList.remove('show'));
+        const line = document.getElementById('scan-line');
+        line.classList.remove('scanning');
+        line.style.animation = 'none';
+        requestAnimationFrame(() => { line.style.animation = ''; });
+        document.getElementById('scan-status').classList.remove('visible');
+        document.getElementById('scan-progress').classList.remove('visible');
+        document.getElementById('scan-progress').textContent = '0%';
+      }, 420);
+    }
+
+    // Main CTA trigger
+    document.getElementById('cta-btn').addEventListener('click', function (e) {
+      e.preventDefault();
+      overlay.classList.add('active');
+
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduced) { revealCard(); return; }
+
+      const statusEl  = document.getElementById('scan-status');
+      const progressEl = document.getElementById('scan-progress');
+      const scanLine  = document.getElementById('scan-line');
+
+      setTimeout(() => {
+        statusEl.textContent = 'INITIALIZING SCAN';
+        statusEl.classList.add('visible');
+      }, 250);
+
+      setTimeout(() => {
+        progressEl.classList.add('visible');
+        scanLine.classList.add('scanning');
+        animateProgress(progressEl, 950);
+        playShutter();
+      }, 550);
+
+      setTimeout(() => { statusEl.textContent = 'SCAN COMPLETE  ✓'; }, 1550);
+
+      setTimeout(() => {
+        statusEl.classList.remove('visible');
+        progressEl.classList.remove('visible');
+        revealCard();
+      }, 1900);
+    });
+
+    document.getElementById('scan-close').addEventListener('click', closeOverlay);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && overlay.classList.contains('active')) closeOverlay();
+    });
+  })();
+  </script>
+</body>
+</html>

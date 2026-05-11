@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">
+<title>07 · Solution</title>
+<link rel="stylesheet" href="../shared/tokens.css">
+<style>
+  .slide { justify-content: center; }
+  h2 { font-size: 52px; margin-bottom: 28px; line-height: 1.3; }
+  .lead { margin-bottom: 72px; }
+
+  .layer-stack {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+
+  .layer {
+    padding: 44px 32px;
+    border: 1px solid var(--border);
+    border-right: none;
+  }
+  .layer:first-child { border-radius: 16px 0 0 16px; }
+  .layer:last-child  { border-radius: 0 16px 16px 0; border-right: 1px solid var(--border); }
+
+  .layer .layer-num {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--coral);
+    color: #fff;
+    font-family: var(--display);
+    font-size: 15px; font-weight: 800;
+    margin-bottom: 24px;
+  }
+
+  .layer h3 { font-size: 22px; margin-bottom: 14px; line-height: 1.4; }
+  .layer p  { font-size: 18px; color: var(--ink-light); line-height: 1.7; }
+  .layer .detail {
+    margin-top: 16px;
+    font-size: 15px;
+    color: var(--ink-faint);
+    line-height: 1.6;
+  }
+</style>
+</head><body>
+  <div class="slide">
+    <div class="section-label rise">06 · SOLUTION</div>
+
+    <h2 class="rise-2">스캔 한 번으로<br>여러 제품과 세계에 <span class="coral">연결</span>합니다</h2>
+
+    <p class="lead rise-3">
+      피규어, 키링, 아바타, 팬굿즈, 호텔·웨딩 기념품까지<br>
+      한 번 만든 3D 데이터를 플랫폼 위에서 반복 활용합니다.
+    </p>
+
+    <div class="layer-stack">
+      <div class="layer rise-3">
+        <div class="layer-num">1</div>
+        <h3>Capture Layer</h3>
+        <p>매장·제휴처·출장 스캔으로 고객 접점에서 원천 데이터 수집</p>
+        <div class="detail">42대 카메라 / 0.1초 촬영</div>
+      </div>
+      <div class="layer rise-4">
+        <div class="layer-num">2</div>
+        <h3>Production Layer</h3>
+        <p>모델링·출력·후처리 자동화 파이프라인으로 원가 절감</p>
+        <div class="detail">AI 시안 + 수작업 피니시</div>
+      </div>
+      <div class="layer rise-4">
+        <div class="layer-num">3</div>
+        <h3>Asset Layer</h3>
+        <p>고객별 3D 데이터를 클라우드에 영구 보관하고 재사용 허브 제공</p>
+        <div class="detail">개인 디지털 아카이브</div>
+      </div>
+      <div class="layer rise-5">
+        <div class="layer-num">4</div>
+        <h3>Commerce Layer</h3>
+        <p>굿즈·아바타·라이선스를 다채널에서 반복 판매하는 커머스</p>
+        <div class="detail">B2C + B2B2C + Digital</div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span><span class="page-dot"></span>MYMINIME STUDIO</span>
+      <span>07</span>
+    </div>
+  </div>
+</body></html>

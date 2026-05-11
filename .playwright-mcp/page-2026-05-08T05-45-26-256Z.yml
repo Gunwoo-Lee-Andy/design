@@ -1,0 +1,68 @@
+- table [ref=e2]:
+  - rowgroup [ref=e3]:
+    - row "INVESTMENT PROPOSAL MyMiniMe Studio 안녕하세요, 스마일게이트인베스트먼트 담당자님. IP·게임·콘텐츠 이해도 최상를 통해 귀사를 알게 되어 연락 드립니다. 그리스는 동상으로, 르네상스는 그림으로, 현대는 사진으로 사람을 기록했습니다. 지금은 3D 데이터의 시대입니다. MyMiniMe Studio는 42대 카메라로 0.1초 만에 사람을 3D 스캔하여 실물 피규어·AR 아바타·AI 학습데이터로 재사용하는 3D 디지털 자산 스튜디오입니다. 체코 Photorobot + 독일 botspot 공식 한국 파트너로서, 이미 전국 6개 이상의 오프라인 거점을 운영하며 월 400명 이상의 고객에게 서비스를 제공하고 있습니다. 400+ 월 고객수 6+ 오프라인 거점 4.5억 Seed 목표 피치덱 보기 → 15분 간략 미팅을 요청 드립니다. 편하신 일정을 알려주시면 맞추겠습니다. MyMiniMe Studio ir@myminime.co.kr MYMMINIME STUDIO · myminime.co.kr" [ref=e4]:
+      - cell "INVESTMENT PROPOSAL MyMiniMe Studio 안녕하세요, 스마일게이트인베스트먼트 담당자님. IP·게임·콘텐츠 이해도 최상를 통해 귀사를 알게 되어 연락 드립니다. 그리스는 동상으로, 르네상스는 그림으로, 현대는 사진으로 사람을 기록했습니다. 지금은 3D 데이터의 시대입니다. MyMiniMe Studio는 42대 카메라로 0.1초 만에 사람을 3D 스캔하여 실물 피규어·AR 아바타·AI 학습데이터로 재사용하는 3D 디지털 자산 스튜디오입니다. 체코 Photorobot + 독일 botspot 공식 한국 파트너로서, 이미 전국 6개 이상의 오프라인 거점을 운영하며 월 400명 이상의 고객에게 서비스를 제공하고 있습니다. 400+ 월 고객수 6+ 오프라인 거점 4.5억 Seed 목표 피치덱 보기 → 15분 간략 미팅을 요청 드립니다. 편하신 일정을 알려주시면 맞추겠습니다. MyMiniMe Studio ir@myminime.co.kr MYMMINIME STUDIO · myminime.co.kr" [ref=e5]:
+        - table [ref=e6]:
+          - rowgroup [ref=e7]:
+            - row [ref=e8]:
+              - cell [ref=e9]
+            - row "INVESTMENT PROPOSAL MyMiniMe Studio" [ref=e10]:
+              - cell "INVESTMENT PROPOSAL MyMiniMe Studio" [ref=e11]:
+                - paragraph [ref=e12]: INVESTMENT PROPOSAL
+                - paragraph [ref=e13]: MyMiniMe Studio
+            - row "안녕하세요, 스마일게이트인베스트먼트 담당자님. IP·게임·콘텐츠 이해도 최상를 통해 귀사를 알게 되어 연락 드립니다." [ref=e14]:
+              - cell "안녕하세요, 스마일게이트인베스트먼트 담당자님. IP·게임·콘텐츠 이해도 최상를 통해 귀사를 알게 되어 연락 드립니다." [ref=e15]:
+                - paragraph [ref=e16]:
+                  - text: 안녕하세요,
+                  - strong [ref=e17]: 스마일게이트인베스트먼트
+                  - text: 담당자님.
+                  - text: IP·게임·콘텐츠 이해도 최상를 통해 귀사를 알게 되어 연락 드립니다.
+            - row [ref=e18]:
+              - cell [ref=e19]
+            - row "그리스는 동상으로, 르네상스는 그림으로, 현대는 사진으로 사람을 기록했습니다. 지금은 3D 데이터의 시대입니다. MyMiniMe Studio는 42대 카메라로 0.1초 만에 사람을 3D 스캔하여 실물 피규어·AR 아바타·AI 학습데이터로 재사용하는 3D 디지털 자산 스튜디오입니다. 체코 Photorobot + 독일 botspot 공식 한국 파트너로서, 이미 전국 6개 이상의 오프라인 거점을 운영하며 월 400명 이상의 고객에게 서비스를 제공하고 있습니다." [ref=e21]:
+              - cell "그리스는 동상으로, 르네상스는 그림으로, 현대는 사진으로 사람을 기록했습니다. 지금은 3D 데이터의 시대입니다. MyMiniMe Studio는 42대 카메라로 0.1초 만에 사람을 3D 스캔하여 실물 피규어·AR 아바타·AI 학습데이터로 재사용하는 3D 디지털 자산 스튜디오입니다. 체코 Photorobot + 독일 botspot 공식 한국 파트너로서, 이미 전국 6개 이상의 오프라인 거점을 운영하며 월 400명 이상의 고객에게 서비스를 제공하고 있습니다." [ref=e22]:
+                - heading "그리스는 동상으로, 르네상스는 그림으로, 현대는 사진으로 사람을 기록했습니다. 지금은 3D 데이터의 시대입니다." [level=1] [ref=e23]:
+                  - text: 그리스는 동상으로, 르네상스는 그림으로,
+                  - text: 현대는 사진으로 사람을 기록했습니다.
+                  - text: 지금은 3D 데이터의 시대입니다.
+                - paragraph [ref=e24]:
+                  - text: MyMiniMe Studio는 42대 카메라로 0.1초 만에 사람을 3D 스캔하여
+                  - text: 실물 피규어·AR 아바타·AI 학습데이터로 재사용하는
+                  - strong [ref=e25]: 3D 디지털 자산 스튜디오
+                  - text: 입니다.
+                  - text: 체코 Photorobot + 독일 botspot 공식 한국 파트너로서, 이미 전국
+                  - strong [ref=e26]: 6개 이상의 오프라인 거점
+                  - text: 을 운영하며 월
+                  - strong [ref=e27]: 400명 이상의 고객
+                  - text: 에게 서비스를 제공하고 있습니다.
+            - row "400+ 월 고객수 6+ 오프라인 거점 4.5억 Seed 목표" [ref=e28]:
+              - cell "400+ 월 고객수 6+ 오프라인 거점 4.5억 Seed 목표" [ref=e29]:
+                - table [ref=e30]:
+                  - rowgroup [ref=e31]:
+                    - row "400+ 월 고객수 6+ 오프라인 거점 4.5억 Seed 목표" [ref=e32]:
+                      - cell "400+ 월 고객수" [ref=e33]:
+                        - paragraph [ref=e34]: 400+
+                        - paragraph [ref=e35]: 월 고객수
+                      - cell [ref=e36]
+                      - cell "6+ 오프라인 거점" [ref=e37]:
+                        - paragraph [ref=e38]: 6+
+                        - paragraph [ref=e39]: 오프라인 거점
+                      - cell [ref=e40]
+                      - cell "4.5억 Seed 목표" [ref=e41]:
+                        - paragraph [ref=e42]: 4.5억
+                        - paragraph [ref=e43]: Seed 목표
+            - row "피치덱 보기 →" [ref=e44]:
+              - cell "피치덱 보기 →" [ref=e45]:
+                - link "피치덱 보기 →" [ref=e46] [cursor=pointer]:
+                  - /url: https://mymminime-pitchdeck.vercel.app
+            - row "15분 간략 미팅을 요청 드립니다. 편하신 일정을 알려주시면 맞추겠습니다. MyMiniMe Studio ir@myminime.co.kr" [ref=e47]:
+              - cell "15분 간략 미팅을 요청 드립니다. 편하신 일정을 알려주시면 맞추겠습니다. MyMiniMe Studio ir@myminime.co.kr" [ref=e48]:
+                - paragraph [ref=e49]:
+                  - text: 15분 간략 미팅을 요청 드립니다.
+                  - text: 편하신 일정을 알려주시면 맞추겠습니다.
+                - paragraph [ref=e50]:
+                  - text: MyMiniMe Studio
+                  - text: ir@myminime.co.kr
+            - row "MYMMINIME STUDIO · myminime.co.kr" [ref=e51]:
+              - cell "MYMMINIME STUDIO · myminime.co.kr" [ref=e52]:
+                - paragraph [ref=e53]: MYMMINIME STUDIO · myminime.co.kr

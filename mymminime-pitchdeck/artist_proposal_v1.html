@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>MyMiniMe Studio · Global IP Infrastructure v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css");
+
+  :root {
+    --g: #1DB954; --gl: #1ED760; --gg: rgba(29,185,84,0.18);
+    --ink: #121212; --s1: #181818; --s2: #282828; --s3: #3E3E3E;
+    --bd: rgba(255,255,255,0.07);
+    --t1: #fff; --t2: rgba(255,255,255,0.7); --t3: rgba(255,255,255,0.38);
+    --dp: 'Plus Jakarta Sans', sans-serif;
+    --bd-font: 'Pretendard', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--ink); color: var(--t1); font-family: var(--bd-font); overflow-x: hidden; scroll-snap-type: y mandatory; }
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  /* ─── Keyframes ─── */
+  @keyframes fadeUp   { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeLeft { from { opacity:0; transform:translateX(-28px); } to { opacity:1; transform:translateX(0); } }
+  @keyframes fadeRight{ from { opacity:0; transform:translateX(28px); } to { opacity:1; transform:translateX(0); } }
+  @keyframes zoomIn   { from { opacity:0; transform:scale(0.93); } to { opacity:1; transform:scale(1); } }
+  @keyframes pRing    { 0%{ transform:scale(1); opacity:0.6; } 100%{ transform:scale(1.6); opacity:0; } }
+  @keyframes bob      { 0%,100%{ transform:translate(-50%,0); opacity:0.3; } 50%{ transform:translate(-50%,8px); opacity:0.6; } }
+
+  /* ─── Entrance helpers ─── */
+  .a-up    { opacity:0; }  .a-up.go    { animation: fadeUp    0.75s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .a-left  { opacity:0; }  .a-left.go  { animation: fadeLeft  0.75s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .a-right { opacity:0; }  .a-right.go { animation: fadeRight 0.75s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .a-zoom  { opacity:0; }  .a-zoom.go  { animation: zoomIn    0.65s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .d0{animation-delay:0s;} .d1{animation-delay:.09s;} .d2{animation-delay:.18s;}
+  .d3{animation-delay:.27s;} .d4{animation-delay:.36s;} .d5{animation-delay:.45s;}
+
+  /* ─── Nav dots ─── */
+  .nav-dots { position:fixed; right:22px; top:50%; transform:translateY(-50%); z-index:100; display:flex; flex-direction:column; gap:10px; }
+  .nav-dot  { width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,0.18); border:none; cursor:pointer; transition:all .3s; }
+  .nav-dot.active { background:var(--g); transform:scale(1.8); box-shadow:0 0 8px var(--gg); }
+
+  /* ─── Sections ─── */
+  section { position:relative; width:100vw; height:100vh; scroll-snap-align:start; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .bg-img { position:absolute; inset:0; background-size:cover; background-position:center; z-index:1; }
+  .ov  { position:absolute; inset:0; z-index:2; background:linear-gradient(135deg,rgba(18,18,18,.97) 0%,rgba(18,18,18,.72) 60%,rgba(18,18,18,.95) 100%); }
+  .content { position:relative; z-index:3; width:100%; max-width:1400px; padding:0 80px; }
+
+  /* ─── Type ─── */
+  h1 { font-family:var(--dp); font-size:78px; font-weight:800; line-height:1.06; margin-bottom:28px; letter-spacing:-.03em; word-break:keep-all; }
+  h2 { font-family:var(--dp); font-size:56px; font-weight:800; line-height:1.12; margin-bottom:22px; letter-spacing:-.025em; word-break:keep-all; }
+  h3 { font-size:21px; font-weight:700; margin-bottom:10px; word-break:keep-all; }
+  p.lead { font-size:21px; font-weight:400; line-height:1.7; color:var(--t2); max-width:820px; word-break:keep-all; }
+  p.desc { font-size:15px; line-height:1.75; color:var(--t3); word-break:keep-all; }
+  .label { font-family:var(--dp); font-size:11px; font-weight:700; letter-spacing:.2em; color:var(--g); margin-bottom:18px; display:block; text-transform:uppercase; }
+  .green { color:var(--g); } .white { color:#fff; } .dim { color:var(--t3); }
+
+  /* ─── Cards ─── */
+  .card { background:var(--s1); border-radius:12px; padding:24px; height:100%; display:flex; flex-direction:column; transition:background .2s,transform .2s; border:1px solid var(--bd); }
+  .card:hover { background:var(--s2); transform:scale(1.02); }
+  .card.accent { background:rgba(29,185,84,0.08); border:1px solid rgba(29,185,84,0.25); }
+
+  /* ─── Layouts ─── */
+  .g2 { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+  .g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+
+  /* ─── Custom UI Elements ─── */
+  .badge { display:inline-flex; align-items:center; gap:8px; padding:10px 20px; border-radius:100px; font-size:13px; font-weight:600; background:rgba(29,185,84,.14); color:var(--g); border:1px solid rgba(29,185,84,.28); }
+  .gi { width:44px; height:44px; border-radius:10px; background:rgba(29,185,84,.1); display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--g); }
+  .gr { display:flex; align-items:flex-start; gap:20px; padding:26px 0; border-bottom:1px solid var(--bd); }
+  .gr:last-child { border-bottom:none; }
+
+  /* ─── Buttons ─── */
+  .btn-p { position:relative; display:inline-flex; align-items:center; gap:12px; padding:18px 48px; background:var(--g); color:#000; text-decoration:none; border-radius:100px; font-family:var(--dp); font-size:16px; font-weight:700; transition:transform .2s; }
+  .btn-p:hover { transform:scale(1.04); }
+  .btn-p::after { content:''; position:absolute; inset:0; border-radius:100px; background:var(--g); animation:pRing 2s ease-out infinite; z-index:-1; }
+
+  .scroll-hint { position:absolute; bottom:28px; left:50%; color:var(--t3); font-size:10px; letter-spacing:.2em; animation:bob 2.5s ease-in-out infinite; text-transform:uppercase; pointer-events:none; }
+</style>
+</head>
+<body>
+
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- 01 COVER -->
+<section id="s0">
+  <div class="bg-img" style="background-image:url('assets/generated/25_a_wide_cinematic_storyboard_like_composite_image.png'); opacity:.2;"></div>
+  <div class="ov"></div>
+  <div class="content" style="text-align:center;">
+    <div class="a-up d0 go" style="display:flex; align-items:center; justify-content:center; margin-bottom:40px;">
+      <span class="badge" style="letter-spacing:0.1em;">GLOBAL IP INFRASTRUCTURE · v1</span>
+    </div>
+    <h1 class="a-up d1">당신의 IP를<br><span class="green">글로벌 커머스 인프라</span>에<br>연결하십시오.</h1>
+    <p class="lead a-up d2" style="margin:0 auto 40px; max-width:720px;">
+      단순 굿즈 제작을 넘어, 마플샵·쇼피파이·위버스의 전략을 결합한<br>
+      <strong class="white">무재고·글로벌·자동화</strong> 기반의 최첨단 IP 커머스 파트너십.
+    </p>
+    <div class="a-up d3" style="display:flex; gap:20px; justify-content:center;">
+      <div class="card dark" style="padding:16px 24px; min-width:180px;">
+        <div style="font-size:12px; color:var(--t3); margin-bottom:4px;">INITIAL COST</div>
+        <div style="font-size:32px; font-weight:800; color:var(--g);">₩0</div>
+      </div>
+      <div class="card dark" style="padding:16px 24px; min-width:180px;">
+        <div style="font-size:12px; color:var(--t3); margin-bottom:4px;">ARTIST PROFIT</div>
+        <div style="font-size:32px; font-weight:800; color:var(--g);">30%</div>
+      </div>
+      <div class="card dark" style="padding:16px 24px; min-width:180px;">
+        <div style="font-size:12px; color:var(--t3); margin-bottom:4px;">GLOBAL REACH</div>
+        <div style="font-size:32px; font-weight:800; color:var(--g);">110+</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">scroll ↓</div>
+</section>
+
+<!-- 02 PLATFORM STRATEGY (Marpple/Shopify style) -->
+<section id="s1">
+  <div class="ov"></div>
+  <div class="content">
+    <span class="label a-left">Platform Strategy</span>
+    <h2 class="a-left d1">우리는 제작을 넘어<br><span class="green">유통과 운영의 모든 리스크</span>를<br>완전 제거합니다.</h2>
+    <div class="g3" style="margin-top:48px;">
+      <div class="card a-up d1">
+        <div class="gi"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <h3 class="white" style="margin-top:20px;">마플샵식 무재고 운영</h3>
+        <p class="desc">주문 즉시 제작(POD)과 유사한 수요 기반 3D 프린팅 시스템. 아티스트는 단 1개의 재고도 떠안지 않습니다.</p>
+      </div>
+      <div class="card a-up d2">
+        <div class="gi"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></div>
+        <h3 class="white" style="margin-top:20px;">쇼피파이식 글로벌 확장</h3>
+        <p class="desc">110개국 현지 결제 및 배송 지원. 해외 팬들이 자국 플랫폼처럼 편하게 구매하는 전용 부티크 환경.</p>
+      </div>
+      <div class="card a-up d3">
+        <div class="gi"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3 class="white" style="margin-top:20px;">위버스식 팬덤 데이터</h3>
+        <p class="desc">단순 판매를 넘어 팬들의 활동 지수 분석. 어떤 피규어가 어디에서 가장 인기 있는지 리포트를 제공합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 CONVERSION PATH (YouTube Shopping) -->
+<section id="s2">
+  <div class="bg-img" style="background-image:url('assets/generated/13_a_clean_well_lit_product_process_infographic_imag.png'); opacity:.3;"></div>
+  <div class="ov"></div>
+  <div class="content">
+    <div class="g2">
+      <div class="a-left">
+        <span class="label">Native Integration</span>
+        <h2>유튜브 영상을 보며<br><span class="green">즉시 구매하는</span><br>압도적 구매 여정.</h2>
+        <p class="lead" style="margin-top:24px;">마이미니미는 아티스트 채널에 제품을 직접 연동하여, 팬들이 감상 중에 이탈 없이 소장하게 만듭니다.</p>
+        <div style="margin-top:32px; display:flex; flex-direction:column; gap:16px;">
+          <div class="gr" style="border:none; padding:0;">
+            <div class="gi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg></div>
+            <div><h3 class="white">유튜브 쇼핑 오피셜 파트너십</h3><p class="desc">영상 하단, 라이브 쇼핑 탭에 피규어 노출</p></div>
+          </div>
+          <div class="gr" style="border:none; padding:0;">
+            <div class="gi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg></div>
+            <div><h3 class="white">글로벌 110개국 직배송</h3><p class="desc">전 세계 어디든 현지 결제 및 통관 지원</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="a-right d2 card accent" style="padding:48px; border-radius:24px;">
+        <h3 class="white" style="font-size:24px; margin-bottom:20px;">Technical Agency</h3>
+        <p class="desc" style="color:rgba(255,255,255,.6); margin-bottom:32px;">마이미니미는 아티스트가 해야 할 모든 기술적 설정을 대행합니다.</p>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div style="font-size:14px; padding:12px; background:rgba(0,0,0,.3); border-radius:8px;">✔ 구글 판매자 센터(GMC) 세팅</div>
+          <div style="font-size:14px; padding:12px; background:rgba(0,0,0,.3); border-radius:8px;">✔ 유튜브 스튜디오 스토어 연결</div>
+          <div style="font-size:14px; padding:12px; background:rgba(0,0,0,.3); border-radius:8px;">✔ 전 국가 결제/배송 모듈 통합</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 FANDOM ENGAGEMENT (Referral/Gleam style) -->
+<section id="s3">
+  <div class="ov"></div>
+  <div class="content">
+    <div class="g2" style="gap:80px;">
+      <div class="a-left">
+        <span class="label">Fan Engagement</span>
+        <h2>팬덤이 스스로<br><span class="green">열정을 증명하게</span><br>만듭니다.</h2>
+        <p class="lead" style="margin-top:24px;">참여형 리더보드를 통해 글로벌 상위 100명의 '슈퍼 팬'을 선발하고, 이들에게만 한정판 피규어 우선권을 제공합니다.</p>
+      </div>
+      <div class="a-right">
+        <div class="card dark" style="padding:40px; border:2px solid var(--g);">
+          <div style="font-size:11px; letter-spacing:.2em; color:var(--g); margin-bottom:20px;">FAN LEADERBOARD</div>
+          <div style="display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:var(--gg); border-radius:8px;">
+              <span style="font-weight:700;">1. @Fan_in_Tokyo</span><span class="green" style="font-weight:800;">4,850 pt</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:rgba(255,255,255,.03); border-radius:8px;">
+              <span>2. @Seoul_Starlight</span><span style="color:var(--t2);">4,200 pt</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:rgba(255,255,255,.03); border-radius:8px;">
+              <span>3. @NYC_KpopLover</span><span style="color:var(--t2);">3,950 pt</span>
+            </div>
+            <div style="text-align:center; padding-top:10px; font-size:12px; color:var(--t3);">... 상위 100인 우선 구매권 자동 발송 ...</div>
+          </div>
+          <div style="margin-top:32px; font-size:13px; line-height:1.6; color:var(--t2);">
+            SNS 공유, 신곡 스트리밍, 친구 초대 등 미션 수행 시 포인트 적립. **Gleam.io** 기반의 신뢰도 높은 선발 시스템.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 FLOW AUTOMATION (Shopify Flow style) -->
+<section id="s4">
+  <div class="ov"></div>
+  <div class="content">
+    <div class="g2">
+      <div class="a-left">
+        <span class="label">Smart CRM</span>
+        <h2>팬 한 명 한 명을<br><span class="green">데이터로 관리하는</span><br>스마트 커머스.</h2>
+        <p class="lead" style="margin-top:24px;">Shopify Flow 기술을 통해 팬덤의 활동 지수에 따라 등급을 나누고, 개인별 맞춤형 혜택을 자동으로 지급합니다.</p>
+      </div>
+      <div class="a-right">
+        <div class="card accent" style="padding:48px; border-radius:24px;">
+          <h3 class="white" style="font-size:24px; margin-bottom:24px;">Automation Logic</h3>
+          <div style="position:relative; padding-left:32px; border-left:2px dashed var(--g);">
+            <div style="margin-bottom:28px;">
+              <div style="font-size:12px; color:var(--g); margin-bottom:4px;">TRIGGER</div>
+              <div style="font-size:16px; font-weight:700;">총 구매 금액 $500 이상 달성 시</div>
+            </div>
+            <div style="margin-bottom:28px;">
+              <div style="font-size:12px; color:var(--g); margin-bottom:4px;">CONDITION</div>
+              <div style="font-size:16px; font-weight:700;">계정 생성 1년 이상 경과</div>
+            </div>
+            <div>
+              <div style="font-size:12px; color:var(--g); margin-bottom:4px;">ACTION</div>
+              <div style="font-size:16px; font-weight:700; color:var(--gl);">VIP 전용 시크릿 구매 URL 자동 발송</div>
+            </div>
+          </div>
+          <p style="margin-top:32px; font-size:12px; color:var(--t3);">이 모든 과정이 아티스트의 개입 없이 24시간 자동으로 돌아갑니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 PRODUCT LINEUP (Existing styles) -->
+<section id="s5">
+  <div class="bg-img" style="background-image:url('assets/yoyomi_goods.jpg'); opacity:.25;"></div>
+  <div class="ov"></div>
+  <div class="content">
+    <div class="g2" style="gap:72px;">
+      <div>
+        <span class="label">Product Lineup</span>
+        <h2 style="margin-bottom:18px;">아티스트 이미지에 맞는<br>맞춤형 굿즈</h2>
+        <div style="display:flex; flex-direction:column; gap:14px; margin-top:32px;">
+          <div class="card" style="padding:22px 28px;">
+            <h3 style="color:var(--g); font-size:15px; margin-bottom:4px;">Premium Realistic</h3>
+            <h4 class="white" style="font-size:18px; font-weight:700;">실사형 피규어 (9/12/15cm)</h4>
+            <div style="margin-top:12px; display:flex; gap:8px;"><span class="badge" style="font-size:11px;">₩79,000~</span></div>
+          </div>
+          <div class="card" style="padding:22px 28px;">
+            <h3 style="color:var(--g); font-size:15px; margin-bottom:4px;">IP Character</h3>
+            <h4 class="white" style="font-size:18px; font-weight:700;">캐릭터 피규어 (4/6/8cm)</h4>
+            <div style="margin-top:12px;"><span class="badge" style="font-size:11px;">₩48,000~</span></div>
+          </div>
+          <div class="card accent" style="padding:22px 28px;">
+            <h3 style="color:var(--g); font-size:15px; margin-bottom:4px;">Fan Package</h3>
+            <h4 class="white" style="font-size:18px; font-weight:700;">피규어 + 디지털 콘텐츠 번들</h4>
+            <div style="margin-top:12px;"><span class="badge" style="font-size:11px;">최고 수익 모델</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="a-right" style="display:flex; justify-content:center;">
+        <img src="assets/yoyomi_goods.jpg" alt="제품" style="width:100%; max-width:520px; border-radius:24px; box-shadow:0 30px 60px rgba(0,0,0,0.5);">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 GUARANTEE -->
+<section id="s6">
+  <div class="ov"></div>
+  <div class="content">
+    <div class="g2" style="gap:88px; align-items:center;">
+      <div class="a-left">
+        <span class="label">Guarantee</span>
+        <h2>아티스트를 위한<br><span class="green">3가지 약속.</span></h2>
+        <div style="margin-top:40px; padding-left:24px; border-left:3px solid var(--g);">
+          <p style="font-style:italic; font-size:20px; color:var(--t2);">"아티스트가 리스크를 지는 모델은<br>진정한 파트너십이 아닙니다."</p>
+        </div>
+      </div>
+      <div class="a-right">
+        <div class="gr">
+          <div class="gi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+          <div><h3 class="white">리스크 제로</h3><p class="desc">선투자 0원, 재고 리스크 0원. 모든 운영 비용은 마이미니미가 부담합니다.</p></div>
+        </div>
+        <div class="gr">
+          <div class="gi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+          <div><h3 class="white">매출 30% 정산</h3><p class="desc">판매가 대비 30%를 조건 없이 아티스트에게 지급합니다. 숨겨진 수수료 제로.</p></div>
+        </div>
+        <div class="gr">
+          <div class="gi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <div><h3 class="white">최종 승인권</h3><p class="desc">아티스트가 최종 샘플을 승인해야만 제작이 시작됩니다. 크리에이티브 통제권 유지.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 CTA -->
+<section id="s7">
+  <div class="bg-img" style="background-image:url('assets/generated/27_a_wide_luxurious_hotel_lobby_scene_with_warm_ambi.png'); opacity:.2;"></div>
+  <div class="ov"></div>
+  <div class="content" style="text-align:center;">
+    <div class="a-up d0" style="margin-bottom:36px;">
+      <span class="badge">2025 Q3 파트너 모집 중 · 소수 정예</span>
+    </div>
+    <h1 class="a-up d1">당신의 IP를 가치 있게<br>전 세계 팬들에게 <span class="green">전달하십시오.</span></h1>
+    <div class="a-up d2" style="display:flex; gap:14px; justify-content:center; margin-top:48px;">
+      <a href="mailto:contact@myminimy.com" class="btn-p">지금 상담 시작하기 →</a>
+      <a href="#" class="btn-s">포트폴리오 다운로드</a>
+    </div>
+    <div style="margin-top:64px; display:flex; gap:40px; justify-content:center; border-top:1px solid var(--bd); padding-top:32px;">
+      <div><div style="font-size:10px; color:var(--t3); letter-spacing:.2em; margin-bottom:4px;">EMAIL</div><div style="font-weight:700;">myminime1943@gmail.com</div></div>
+      <div><div style="font-size:10px; color:var(--t3); letter-spacing:.2em; margin-bottom:4px;">WEBSITE</div><div style="font-weight:700;">www.myminime-studio.com</div></div>
+      <div><div style="font-size:10px; color:var(--t3); letter-spacing:.2em; margin-bottom:4px;">INSTAGRAM</div><div style="font-weight:700;">@mymini.me_</div></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  const sections = Array.from(document.querySelectorAll('section'));
+  const nav = document.getElementById('navDots');
+
+  sections.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => sections[i].scrollIntoView({ behavior:'smooth' });
+    nav.appendChild(d);
+  });
+  const dots = Array.from(nav.querySelectorAll('.nav-dot'));
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const i = sections.indexOf(e.target);
+        dots.forEach((d, j) => d.classList.toggle('active', i === j));
+        e.target.querySelectorAll('.a-up, .a-left, .a-right').forEach(el => el.classList.add('go'));
+      }
+    });
+  }, { threshold: 0.5 });
+  sections.forEach(s => observer.observe(s));
+
+  // Initial trigger for s0
+  sections[0].querySelectorAll('.a-up, .a-left, .a-right').forEach(el => el.classList.add('go'));
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/index_visual.html" },
+    { "source": "/en", "destination": "/index_visual_en.html" },
+    { "source": "/deck", "destination": "/deck-viewer.html" }
+  ]
+}

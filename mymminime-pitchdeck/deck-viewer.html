@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>MyMiniMe Studio · Pitch Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<script>
+  window.DECK_MANIFEST = [
+    { file: "slides/01-cover.html",       label: "Cover" },
+    { file: "slides/02-thesis.html",      label: "Investment Thesis" },
+    { file: "slides/03-empathize.html",   label: "Empathize" },
+    { file: "slides/04-define.html",      label: "Define" },
+    { file: "slides/05-causal.html",      label: "Causal Insight" },
+    { file: "slides/06-reframe.html",     label: "Reframe" },
+    { file: "slides/07-solution.html",    label: "Solution" },
+    { file: "slides/08-prototype.html",   label: "Prototype" },
+    { file: "slides/09-ladder.html",      label: "Product Ladder" },
+    { file: "slides/10-gtm.html",         label: "Go-to-Market" },
+    { file: "slides/11-bm.html",          label: "Business Model" },
+    { file: "slides/12-test.html",        label: "Test" },
+    { file: "slides/13-moat.html",        label: "Moat" },
+    { file: "slides/14-os.html",          label: "Operating System" },
+    { file: "slides/15-benchmark.html",   label: "Benchmark" },
+    { file: "slides/16-fundraising.html", label: "Fundraising" },
+    { file: "slides/17-milestones.html",  label: "Milestones" },
+    { file: "slides/18-closing.html",     label: "Closing" }
+  ];
+  window.DECK_WIDTH = 1920;
+  window.DECK_HEIGHT = 1080;
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    background: #111;
+    overflow: hidden;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  #stage {
+    position: fixed;
+    top: 0; left: 0;
+    transform-origin: top left;
+    background: #fff;
+  }
+
+  iframe {
+    width: 100%; height: 100%;
+    border: 0;
+    background: #fff;
+  }
+
+  /* ── Minimal bottom bar ──────────────── */
+  .bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px;
+    background: rgba(0,0,0,0.92);
+    z-index: 100;
+  }
+
+  .bar button {
+    background: none; border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 18px;
+    cursor: pointer;
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px;
+    transition: all 0.15s;
+  }
+  .bar button:hover { color: #fff; background: rgba(255,255,255,0.08); }
+
+  .bar .counter {
+    font-size: 14px; font-weight: 700;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.15em;
+    min-width: 100px;
+    text-align: center;
+  }
+
+  .bar .label {
+    font-size: 13px; font-weight: 500;
+    color: rgba(255,255,255,0.25);
+    max-width: 240px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  /* ── Progress dots ──────────────────── */
+  .progress {
+    display: flex; gap: 4px; align-items: center;
+  }
+
+  .progress .pip {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .progress .pip.active {
+    background: #FF385C;
+    width: 20px;
+    border-radius: 3px;
+  }
+
+  .progress .pip:hover { background: rgba(255,255,255,0.4); }
+  .progress .pip.active:hover { background: #FF385C; }
+
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    html, body { background: #fff; overflow: visible; height: auto; }
+    #stage { position: static; transform: none !important; }
+    .bar { display: none !important; }
+    .print-stack { display: block; }
+    .print-stack iframe { width: 1920px; height: 1080px; page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<div id="stage">
+  <iframe id="frame" src="about:blank"></iframe>
+</div>
+
+<div class="bar">
+  <button id="prev">‹</button>
+  <div class="progress" id="progress"></div>
+  <button id="next">›</button>
+  <span class="counter" id="counter">01 / 18</span>
+  <span class="label" id="label"></span>
+</div>
+
+<div class="print-stack" id="ps" style="display:none"></div>
+
+<script>
+(function () {
+  const W = 1920, H = 1080;
+  const deck = window.DECK_MANIFEST;
+  const stage = document.getElementById('stage');
+  const frame = document.getElementById('frame');
+  const counter = document.getElementById('counter');
+  const label = document.getElementById('label');
+  const progress = document.getElementById('progress');
+  let cur = 0;
+
+  stage.style.width = W + 'px';
+  stage.style.height = H + 'px';
+
+  // Build progress dots
+  deck.forEach((_, i) => {
+    const pip = document.createElement('div');
+    pip.className = 'pip';
+    pip.onclick = () => go(i);
+    progress.appendChild(pip);
+  });
+
+  function fit() {
+    const barH = 48;
+    const s = Math.min(innerWidth / W, (innerHeight - barH) / H);
+    const x = (innerWidth - W * s) / 2;
+    const y = (innerHeight - barH - H * s) / 2;
+    stage.style.transform = `translate(${x}px,${y}px) scale(${s})`;
+  }
+
+  function go(i) {
+    if (i < 0 || i >= deck.length) return;
+    cur = i;
+    frame.src = deck[i].file;
+    counter.textContent = `${String(i+1).padStart(2,'0')} / ${deck.length}`;
+    label.textContent = deck[i].label;
+    progress.querySelectorAll('.pip').forEach((p, j) => p.classList.toggle('active', j === i));
+    history.replaceState(null, '', '#' + (i+1));
+  }
+
+  addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); go(cur+1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'PageUp')                   { e.preventDefault(); go(cur-1); }
+  });
+
+  document.getElementById('prev').onclick = () => go(cur-1);
+  document.getElementById('next').onclick = () => go(cur+1);
+  addEventListener('resize', fit);
+
+  fit();
+  const h = parseInt(location.hash.slice(1)) - 1;
+  go(!isNaN(h) && h >= 0 ? h : 0);
+})();
+</script>
+</body>
+</html>

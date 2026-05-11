@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyMiniMe Studio · Visual Pitch Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --coral: #FF385C;
+    --coral-light: #FF5A79;
+    --ink: #111111;
+    --ink-light: #222222;
+    --display: 'Plus Jakarta Sans', sans-serif;
+    --body: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--body);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+  }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--ink); }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+
+  /* ── Scan CTA Overlay ── */
+  #scan-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(17,17,17,0.96);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  #scan-overlay.active { opacity: 1; pointer-events: all; }
+
+  #scan-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--coral) 40%, var(--coral) 60%, transparent);
+    box-shadow: 0 0 24px var(--coral), 0 0 60px rgba(255,56,92,0.35);
+    top: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  #scan-line::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; top: -80px;
+    height: 80px;
+    background: linear-gradient(to top, rgba(255,56,92,0.07), transparent);
+    pointer-events: none;
+  }
+  #scan-line.scanning {
+    opacity: 1;
+    animation: scanDown 0.95s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  @keyframes scanDown { 0%{top:0%} 100%{top:100%} }
+
+  #scan-status {
+    position: absolute;
+    top: 44px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    color: var(--coral);
+    opacity: 0;
+    transition: opacity 0.25s;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  #scan-status.visible { opacity: 1; }
+
+  #scan-progress {
+    position: absolute;
+    top: 74px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--display);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.35);
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  #scan-progress.visible { opacity: 1; }
+
+  #scan-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,56,92,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,56,92,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+  #scan-overlay.active #scan-grid { opacity: 1; }
+
+  #contact-card {
+    position: relative;
+    z-index: 1;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(255,56,92,0.25);
+    border-radius: 24px;
+    padding: 52px 64px;
+    min-width: 380px;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  #contact-card.revealed { opacity: 1; pointer-events: all; }
+
+  .card-layer {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .card-layer.show { opacity: 1; transform: translateY(0); }
+
+  .scan-badge {
+    display: inline-block;
+    font-family: var(--display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--coral);
+    border: 1px solid rgba(255,56,92,0.5);
+    border-radius: 20px;
+    padding: 5px 16px;
+    margin-bottom: 32px;
+  }
+  .card-name {
+    font-family: var(--display);
+    font-size: 44px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  .card-role {
+    font-size: 14px;
+    color: rgba(255,255,255,0.38);
+    letter-spacing: 0.06em;
+    margin-bottom: 36px;
+  }
+  .card-divider { height: 1px; background: rgba(255,255,255,0.08); margin-bottom: 36px; }
+  .card-contact { display: flex; flex-direction: column; gap: 18px; margin-bottom: 44px; }
+  .card-contact a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 17px;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    transition: color 0.2s;
+    letter-spacing: 0.02em;
+  }
+  .card-contact a:hover { color: var(--coral); }
+  .card-contact .ci { font-size: 15px; color: var(--coral); }
+
+  #scan-close {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    color: rgba(255,255,255,0.35);
+    font-family: var(--display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  #scan-close:hover { border-color: rgba(255,255,255,0.35); color: rgba(255,255,255,0.7); }
+
+  @media (prefers-reduced-motion: reduce) {
+    #scan-line { display: none; }
+    .card-layer { transition: none; }
+  }
+
+  section {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    scroll-snap-align: start;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .bg-image {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+    transform: scale(1.02);
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to top, rgba(17,17,17,0.95) 0%, rgba(17,17,17,0.5) 50%, rgba(17,17,17,0.85) 100%);
+    z-index: 2;
+  }
+  .overlay-dark { background: rgba(17,17,17,0.8); }
+  .overlay-solid { background: var(--ink); }
+
+  .content {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    max-width: 1440px;
+    padding: 0 80px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .content.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Typography */
+  h1 { font-family: var(--display); font-size: 82px; font-weight: 800; line-height: 1.15; margin-bottom: 24px; letter-spacing: -0.02em; }
+  h2 { font-size: 56px; font-weight: 700; line-height: 1.25; margin-bottom: 24px; }
+  h3 { font-size: 32px; font-weight: 600; margin-bottom: 16px; color: var(--coral); }
+  p.lead { font-size: 24px; font-weight: 400; line-height: 1.6; color: rgba(255,255,255,0.85); max-width: 800px; }
+  p.desc { font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.6); }
+
+  .label { font-family: var(--display); font-size: 14px; font-weight: 700; letter-spacing: 0.15em; color: var(--coral); margin-bottom: 24px; display: block; }
+  .coral { color: var(--coral); }
+
+  /* Layouts */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+
+  .image-box { border-radius: 24px; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.5); }
+  .image-box img { width: 100%; height: auto; display: block; }
+
+  /* Glassmorphism Cards */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 48px;
+    transition: transform 0.3s;
+  }
+  .glass-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.05); }
+
+  .metric { font-family: var(--display); font-size: 64px; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 16px; }
+
+  /* Table styling */
+  .table-row {
+    display: grid; grid-template-columns: 2fr 2fr 2fr 1fr; gap: 24px;
+    padding: 24px 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .table-row.header { font-family: var(--display); font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; border-bottom: 2px solid rgba(255,255,255,0.2); }
+  .table-row.highlight { background: rgba(255, 56, 92, 0.05); border-bottom-color: var(--coral); }
+
+  /* Navigation Hint */
+  .scroll-hint {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 10;
+    color: rgba(255,255,255,0.5); font-size: 14px; letter-spacing: 0.1em; font-family: var(--display);
+    animation: bounce 2s infinite; pointer-events: none;
+  }
+  @keyframes bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 10px); } }
+
+  /* Slide indicator */
+  .slide-num { position: absolute; top: 40px; left: 80px; font-family: var(--display); font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.3); z-index: 10; letter-spacing: 0.1em; }
+
+  /* ── Tablet (641px – 1024px) ── */
+  @media (max-width: 1024px) {
+    .content { padding: 0 48px; }
+    h1 { font-size: 54px; }
+    h2 { font-size: 38px; }
+    .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .glass-card { padding: 32px; }
+    .metric { font-size: 48px; }
+    .slide-num { left: 48px; }
+    #contact-card { padding: 40px 44px; }
+  }
+
+  /* ── Mobile (≤ 640px) ── */
+  @media (max-width: 640px) {
+    body { scroll-snap-type: y mandatory; }
+
+    section {
+      height: 100vh;
+      height: 100svh;
+      align-items: flex-start;
+      padding-top: 56px;
+    }
+
+    .content { padding: 0 20px 52px; }
+
+    h1 { font-size: clamp(1.5rem, 6.5vw, 2.2rem); line-height: 1.2; margin-bottom: 12px; }
+    h2 { font-size: clamp(1.2rem, 5.5vw, 1.8rem); line-height: 1.2; margin-bottom: 12px; }
+    h3 { font-size: 16px; margin-bottom: 8px; }
+    p.lead { font-size: 14px; line-height: 1.55; max-width: 100%; }
+    p.desc { font-size: 13px; line-height: 1.5; }
+    .label { font-size: 10px; letter-spacing: 0.12em; margin-bottom: 12px; }
+
+    .grid-2,
+    .grid-3 { grid-template-columns: 1fr; gap: 12px; }
+    .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+
+    .glass-card { padding: 16px 18px; border-radius: 16px; }
+    .glass-card:hover { transform: none; }
+
+    .metric { font-size: 34px; margin-bottom: 6px; }
+
+    .slide-num { left: 20px; top: 18px; font-size: 11px; }
+    .scroll-hint { bottom: 14px; font-size: 11px; }
+
+    .grid-2 .image-box { display: none; }
+
+    .content .grid-3 { margin-top: 20px !important; }
+    .content .grid-4 { margin-top: 20px !important; }
+    .content p.lead { margin-bottom: 18px !important; }
+
+    #slide-18 h1 { font-size: clamp(1.15rem, 5vw, 1.5rem) !important; margin-bottom: 14px; }
+    #slide-18 p.lead { margin-bottom: 20px !important; }
+    #slide-18 .stats-row {
+      flex-direction: column !important;
+      gap: 16px !important;
+      margin-bottom: 24px !important;
+    }
+    #slide-18 .stats-divider { width: 40px !important; height: 1px !important; }
+    #slide-18 .stat-value { font-size: 32px !important; }
+
+    #cta-btn { padding: 14px 36px !important; font-size: 15px !important; }
+
+    .table-row { grid-template-columns: 1fr; gap: 6px; padding: 12px 0; }
+    .table-row.header { display: none; }
+
+    #contact-card {
+      min-width: unset;
+      width: calc(100% - 40px);
+      max-width: 360px;
+      padding: 32px 24px;
+      border-radius: 20px;
+    }
+    .card-name { font-size: 28px; }
+    .card-role { font-size: 12px; margin-bottom: 24px; }
+    .card-contact { gap: 14px; margin-bottom: 28px; }
+    .card-contact a { font-size: 15px; gap: 10px; }
+    #scan-status { font-size: 10px; letter-spacing: 0.2em; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- 01 Cover -->
+  <section id="slide-01">
+    <div class="bg-image" style="background-image: url('assets/generated/15_a_highly_realistic_cinematic_3d_rendered_scene_wi.png');"></div>
+    <div class="overlay"></div>
+    <div class="slide-num">01 / 12</div>
+    <div class="content" style="text-align: center;">
+      <span class="label">INVESTMENT PITCH DECK</span>
+      <h1>The company that stores and<br><span class="coral">reuses people's digital assets</span></h1>
+      <p class="lead" style="margin: 0 auto;">
+        MyMiniMe Studio preserves real memories as figurines,<br>
+        then transforms them into 3D digital twins that create lasting value.
+      </p>
+    </div>
+    <div class="scroll-hint">SCROLL DOWN ↓</div>
+  </section>
+
+  <!-- 02 Thesis -->
+  <section id="slide-02">
+    <div class="bg-image" style="background-image: url('assets/generated/21_a_warm_softly_lit_collage_montage_style_photograp.png'); opacity: 0.4;"></div>
+    <div class="overlay overlay-dark"></div>
+    <div class="slide-num">02 / 12</div>
+    <div class="content">
+      <span class="label">INVESTMENT THESIS</span>
+      <h2>We're building<br>"the next way to remember"</h2>
+      <p class="lead" style="margin-bottom: 40px;">
+        People don't buy figurines — they buy a <strong>tangible connection to who they are right now.</strong><br>
+        But existing 3D data has always been "make once, use once, done."
+      </p>
+      <div class="glass-card" style="display: inline-block;">
+        <h3>MyMiniMe's Structural Pivot</h3>
+        <p class="desc">Moving beyond one-shot manufacturing,<br>we're shifting the paradigm to a data generation and reuse ecosystem built on emotional connection.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 Empathize -->
+  <section id="slide-03">
+    <div class="bg-image" style="background-image: url('assets/generated/05_a_clean_minimal_softly_lit_close_up_still_life_p.png'); opacity: 0.8;"></div>
+    <div class="overlay"></div>
+    <div class="slide-num">03 / 12</div>
+    <div class="content">
+      <span class="label">EMPATHIZE</span>
+      <h2>"Can we capture my child<br>at their most beautiful — in 3D?"</h2>
+      <div class="grid-3" style="margin-top: 64px;">
+        <div class="glass-card">
+          <h3 style="color: #fff; font-size: 24px;">Family</h3>
+          <p class="desc">"I want to keep my parents' healthy, vibrant selves — not as a flat photo, but as something you can feel the presence of."</p>
+        </div>
+        <div class="glass-card">
+          <h3 style="color: #fff; font-size: 24px;">Pet</h3>
+          <p class="desc">"Even after my dog is gone, I want a physical figure and 3D avatar I can still reach out to."</p>
+        </div>
+        <div class="glass-card">
+          <h3 style="color: #fff; font-size: 24px;">Wedding</h3>
+          <p class="desc">"I want to keep our most radiant moment — not just a framed photo, but something three-dimensional, like a trophy."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Define -->
+  <section id="slide-04">
+    <div class="bg-image"></div>
+    <div class="overlay overlay-solid"></div>
+    <div class="slide-num">04 / 12</div>
+    <div class="content">
+      <span class="label">DEFINE</span>
+      <h2>What customers want —<br>but the industry can't deliver: <span class="coral">3 failures</span></h2>
+      <div class="grid-3" style="margin-top: 64px;">
+        <div>
+          <div class="metric">15<span style="font-size: 24px;">%</span></div>
+          <h3 style="font-size: 22px; color: #fff;">High Claim Rate (Accuracy)</h3>
+          <p class="desc">Manual modeling from flat photos consistently misses customer expectations, leading to costly revisions and high dissatisfaction.</p>
+        </div>
+        <div>
+          <div class="metric">3<span style="font-size: 24px;">wk</span></div>
+          <h3 style="font-size: 22px; color: #fff;">Handcraft Bottleneck (Lead Time)</h3>
+          <p class="desc">100% manual processes take 3+ weeks from order to delivery. Impossible to scale.</p>
+        </div>
+        <div>
+          <div class="metric">$0</div>
+          <h3 style="font-size: 22px; color: #fff;">Evaporating Data (Monetization)</h3>
+          <p class="desc">Expensively created 3D assets end with a single print. No model exists to reuse data and generate follow-on LTV.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 Reframe -->
+  <section id="slide-06">
+    <div class="bg-image" style="background-image: url('assets/generated/07_a_clean_modern_interior_product_experience_scene.png');"></div>
+    <div class="overlay"></div>
+    <div class="slide-num">05 / 12</div>
+    <div class="content">
+      <span class="label">REFRAME</span>
+      <h2>We're not a figurine manufacturer —<br>we're an <span class="coral">offline 3D scan network</span></h2>
+      <p class="lead" style="margin-bottom: 64px;">
+        With 42 cameras firing simultaneously, we convert real people and pets<br>
+        into 3D data in 0.1 seconds — a customer touchpoint already built and operating.
+      </p>
+      <div class="grid-3">
+        <div class="glass-card">
+          <div class="metric">0.1<span style="font-size: 32px">s</span></div>
+          <h3 style="font-size: 20px; color: #fff;">360° Instant Capture</h3>
+          <p class="desc">Motion-blur-free precision scan</p>
+        </div>
+        <div class="glass-card">
+          <div class="metric">6<span style="font-size: 32px">+</span></div>
+          <h3 style="font-size: 20px; color: #fff;">Nationwide Locations</h3>
+          <p class="desc">Seoul metro stores &amp; pop-ups</p>
+        </div>
+        <div class="glass-card">
+          <div class="metric">400<span style="font-size: 32px">+</span></div>
+          <h3 style="font-size: 20px; color: #fff;">Monthly Customers</h3>
+          <p class="desc">Scan → model → print, automated</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 Solution -->
+  <section id="slide-07">
+    <div class="bg-image" style="background-image: url('assets/generated/02_a_clean_high_end_3d_render_infographic_style_sc.png'); opacity: 0.3;"></div>
+    <div class="overlay overlay-dark"></div>
+    <div class="slide-num">06 / 12</div>
+    <div class="content">
+      <div class="grid-2">
+        <div>
+          <span class="label">SOLUTION</span>
+          <h2>One 0.1-second scan,<br>infinite reuse</h2>
+          <p class="lead" style="margin-bottom: 32px;">
+            Customers capture a moment in memory.<br>
+            We lock in a perfect 3D digital asset.
+          </p>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 16px;">
+            <li style="font-size: 20px; color: #fff;">▸ <strong>Capture:</strong> 42 cameras sync-fire to freeze even fleeting expressions in 0.1s</li>
+            <li style="font-size: 20px; color: #fff;">▸ <strong>Generate:</strong> AI pipeline optimizes mesh and texture automatically</li>
+            <li style="font-size: 20px; color: #fff;">▸ <strong>Deliver:</strong> Ultra-precision 3D printing + hand-finishing for the physical product</li>
+          </ul>
+        </div>
+        <div class="image-box">
+          <img src="assets/generated/02_a_clean_high_end_3d_render_infographic_style_sc.png" alt="Workflow">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 Product Ladder -->
+  <section id="slide-09">
+    <div class="bg-image" style="background-image: url('assets/generated/12_a_clean_warm_toned_product_showcase_scene_with_so.png'); opacity: 0.3;"></div>
+    <div class="overlay overlay-dark"></div>
+    <div class="slide-num">07 / 12</div>
+    <div class="content">
+      <div class="grid-2">
+        <div class="image-box">
+          <img src="assets/generated/12_a_clean_warm_toned_product_showcase_scene_with_so.png" alt="Product Hierarchy">
+        </div>
+        <div>
+          <span class="label">PRODUCT LADDER</span>
+          <h2>One scan,<br>an expanding product lineup</h2>
+          <p class="lead" style="margin-bottom: 40px;">
+            Entry products lower the barrier to try.<br>
+            Premium physical and digital assets maximize LTV.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 24px;">
+            <div class="glass-card" style="padding: 24px;">
+              <h3 style="font-size: 18px; margin-bottom: 8px;">1. ENTRY — Light Touch</h3>
+              <p class="desc">Keyrings, standees, and accessible goods (~$35)</p>
+            </div>
+            <div class="glass-card" style="padding: 24px;">
+              <h3 style="font-size: 18px; margin-bottom: 8px;">2. PREMIUM — Strong Memory</h3>
+              <p class="desc">Wedding, family, pet precision figurines ($140–$280)</p>
+            </div>
+            <div class="glass-card" style="padding: 24px;">
+              <h3 style="font-size: 18px; margin-bottom: 8px; color: var(--coral)">3. DIGITAL — Data Reuse</h3>
+              <p class="desc">3D metaverse avatars, AR studio assets</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 GTM -->
+  <section id="slide-10">
+    <div class="bg-image" style="background-image: url('assets/generated/08_a_clean_modern_retail_exhibition_interior_colla.png');"></div>
+    <div class="overlay"></div>
+    <div class="slide-num">08 / 12</div>
+    <div class="content">
+      <span class="label">GO-TO-MARKET</span>
+      <h2>Enter the highest-emotion spaces<br>via <span class="coral">B2B2C partnerships</span></h2>
+      <p class="lead" style="margin-bottom: 64px;">
+        By placing scan booths inside wedding venues, 5-star hotels, and premium department stores,<br>we slash CAC and build the data-reuse habit at the moment of peak desire.
+      </p>
+      <div class="grid-3">
+        <div class="glass-card">
+          <h3 style="font-size: 20px; color: #fff;">Family &amp; Pets (B2C)</h3>
+          <p class="desc">Direct bookings via owned stores and online reservation system</p>
+        </div>
+        <div class="glass-card" style="border-color: var(--coral);">
+          <h3 style="font-size: 20px; color: #fff;">Wedding · Hotel · Retail (B2B2C)</h3>
+          <p class="desc">Premium channel pop-ups and partnerships. Dramatically lower CAC</p>
+        </div>
+        <div class="glass-card">
+          <h3 style="font-size: 20px; color: #fff;">Metaverse &amp; AR (Digital)</h3>
+          <p class="desc">3D asset expansion into Roblox, ZEPETO, and virtual worlds</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 Moat -->
+  <section id="slide-13">
+    <div class="bg-image" style="background-image: url('assets/generated/13_a_clean_well_lit_product_process_infographic_imag.png'); opacity: 0.2;"></div>
+    <div class="overlay overlay-dark"></div>
+    <div class="slide-num">09 / 12</div>
+    <div class="content">
+      <div class="grid-2">
+        <div>
+          <span class="label">ECONOMIC MOAT</span>
+          <h2>The <span class="coral">data flywheel</span><br>that drives dominant margins</h2>
+          <p class="lead" style="margin-bottom: 40px;">
+            Manufacturing cost occurs only on the first purchase.<br>
+            Every derivative product made from the stored 3D data<br>
+            drives marginal cost toward zero — and margins toward 90%.
+          </p>
+        </div>
+        <div class="image-box">
+          <img src="assets/generated/13_a_clean_well_lit_product_process_infographic_imag.png" alt="Data Flywheel">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 Operating System -->
+  <section id="slide-14">
+    <div class="bg-image" style="background-image: url('assets/generated/28_a_wide_ultra_clean_modern_industrial_lab_producti.png'); opacity: 0.4;"></div>
+    <div class="overlay overlay-dark"></div>
+    <div class="slide-num">10 / 12</div>
+    <div class="content" style="text-align: center;">
+      <span class="label">OPERATING SYSTEM</span>
+      <h2>We manage with <span class="coral">software</span>, not orders</h2>
+      <p class="lead" style="margin: 0 auto 64px auto;">
+        A proprietary integrated dashboard governs the full pipeline —<br>from scan data capture to printing and delivery — laying the foundation for scale.
+      </p>
+      <div class="grid-4" style="text-align: left;">
+        <div class="glass-card" style="padding: 32px;">
+          <h3 style="font-size: 18px; color: #fff;">1. CRM &amp; Booker</h3>
+          <p class="desc" style="font-size: 15px;">Online booking &amp; payment automation<br><span class="coral">60% reduction in support staff</span></p>
+        </div>
+        <div class="glass-card" style="padding: 32px;">
+          <h3 style="font-size: 18px; color: #fff;">2. Asset Pipeline</h3>
+          <p class="desc" style="font-size: 15px;">Cloud-based 3D modeling<br><span class="coral">40% faster lead time</span></p>
+        </div>
+        <div class="glass-card" style="padding: 32px;">
+          <h3 style="font-size: 18px; color: #fff;">3. Factory Ctrl</h3>
+          <p class="desc" style="font-size: 15px;">Printer scheduling API<br><span class="coral">Defect rate under 3%</span></p>
+        </div>
+        <div class="glass-card" style="padding: 32px;">
+          <h3 style="font-size: 18px; color: #fff;">4. Data Hub</h3>
+          <p class="desc" style="font-size: 15px;">Personal digital twin storage<br><span class="coral">Drives repeat purchase rate</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 Fundraising -->
+  <section id="slide-16">
+    <div class="bg-image"></div>
+    <div class="overlay overlay-solid"></div>
+    <div class="slide-num">11 / 12</div>
+    <div class="content">
+      <span class="label">FUNDRAISING</span>
+      <h2>18 months of growth powered by a<br><span class="coral">$3M</span> Seed Round</h2>
+      <p class="lead" style="margin-bottom: 64px;">
+        Proceeds are focused entirely on expanding B2B scan network partnerships<br>and deepening our proprietary operating software.
+      </p>
+      <div class="grid-3">
+        <div class="glass-card">
+          <div class="metric">35<span style="font-size: 24px">%</span></div>
+          <h3 style="font-size: 18px; color: #fff;">Network Expansion ($1.05M)</h3>
+          <p class="desc">B2B scan booth rollout, new location openings</p>
+        </div>
+        <div class="glass-card">
+          <div class="metric">40<span style="font-size: 24px">%</span></div>
+          <h3 style="font-size: 18px; color: #fff;">R&amp;D &amp; OS Build-out ($1.2M)</h3>
+          <p class="desc">Integrated dashboard &amp; AI pipeline</p>
+        </div>
+        <div class="glass-card">
+          <div class="metric">25<span style="font-size: 24px">%</span></div>
+          <h3 style="font-size: 18px; color: #fff;">Team &amp; Marketing ($750K)</h3>
+          <p class="desc">Key hires and early channel marketing</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 Closing -->
+  <section id="slide-18">
+    <div class="bg-image" style="background-image: url('assets/generated/27_a_wide_luxurious_hotel_lobby_scene_with_warm_ambi.png');"></div>
+    <div class="overlay"></div>
+    <div class="slide-num">12 / 12</div>
+    <div class="content" style="text-align: center;">
+      <h1 style="font-size: 64px; margin-bottom: 32px;">Not a figurine company —<br>a company that stores and<br>reuses people's 3D assets</h1>
+      <p class="lead" style="margin: 0 auto 56px auto;">
+        Starting from the customer touchpoint where memories are purchased,<br>we scale physical goods and digital twins simultaneously.
+      </p>
+
+      <div class="stats-row" style="display: flex; gap: 48px; justify-content: center; margin-bottom: 64px; align-items: center;">
+        <div>
+          <div class="stat-value" style="font-family: var(--display); font-size: 48px; font-weight: 800; color: var(--coral);">$3M</div>
+          <div style="font-size: 16px; color: rgba(255,255,255,0.4); margin-top: 8px;">Seed / Pre-A</div>
+        </div>
+        <div class="stats-divider" style="width: 1px; height: 60px; background: rgba(255,255,255,0.2);"></div>
+        <div>
+          <div class="stat-value" style="font-family: var(--display); font-size: 48px; font-weight: 800; color: var(--coral);">6+</div>
+          <div style="font-size: 16px; color: rgba(255,255,255,0.4); margin-top: 8px;">Offline Locations</div>
+        </div>
+        <div class="stats-divider" style="width: 1px; height: 60px; background: rgba(255,255,255,0.2);"></div>
+        <div>
+          <div class="stat-value" style="font-family: var(--display); font-size: 48px; font-weight: 800; color: var(--coral);">400+</div>
+          <div style="font-size: 16px; color: rgba(255,255,255,0.4); margin-top: 8px;">Monthly Customers</div>
+        </div>
+      </div>
+
+      <a href="#" id="cta-btn" style="display: inline-block; padding: 20px 56px; background: var(--coral); color: #fff; text-decoration: none; border-radius: 12px; font-size: 20px; font-weight: 700; letter-spacing: 0.05em; transition: all 0.3s;">CONNECT WITH US</a>
+    </div>
+  </section>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.content').forEach(el => observer.observe(el));
+  </script>
+
+  <!-- Scan CTA -->
+  <script>
+  (function () {
+    const overlay = document.createElement('div');
+    overlay.id = 'scan-overlay';
+    overlay.innerHTML = `
+      <div id="scan-grid"></div>
+      <div id="scan-line"></div>
+      <span id="scan-status"></span>
+      <span id="scan-progress">0%</span>
+      <div id="contact-card">
+        <div class="card-layer">
+          <span class="scan-badge">● SCAN COMPLETE</span>
+        </div>
+        <div class="card-layer">
+          <div class="card-name">이건우</div>
+          <div class="card-role">Founder · MyMiniMe Studio</div>
+        </div>
+        <div class="card-layer"><div class="card-divider"></div></div>
+        <div class="card-layer">
+          <div class="card-contact">
+            <a href="https://www.myminime-studio.com" target="_blank" rel="noopener noreferrer" aria-label="Website">
+              <span class="ci">🌐</span> www.myminime-studio.com
+            </a>
+            <a href="tel:01082010817" aria-label="Call us">
+              <span class="ci">📱</span> 010-8201-0817
+            </a>
+            <a href="mailto:nadalgw@gmail.com" aria-label="Email us">
+              <span class="ci">✉</span> nadalgw@gmail.com
+            </a>
+          </div>
+        </div>
+        <div class="card-layer">
+          <button id="scan-close">✕ &nbsp; CLOSE</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+
+    function playShutter() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        [
+          { freq: 900, end: 300, dur: 0.06, vol: 0.18 },
+          { freq: 300, end: 100, dur: 0.12, vol: 0.08, delay: 0.06 }
+        ].forEach(({ freq, end, dur, vol, delay = 0 }) => {
+          const osc = ctx.createOscillator();
+          const g = ctx.createGain();
+          const t = ctx.currentTime + delay;
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(freq, t);
+          osc.frequency.exponentialRampToValueAtTime(end, t + dur);
+          g.gain.setValueAtTime(vol, t);
+          g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+          osc.connect(g); g.connect(ctx.destination);
+          osc.start(t); osc.stop(t + dur + 0.01);
+        });
+      } catch (e) {}
+    }
+
+    function animateProgress(el, duration) {
+      const start = performance.now();
+      (function tick(now) {
+        const p = Math.min((now - start) / duration, 1);
+        el.textContent = Math.round(p * 100) + '%';
+        if (p < 1) requestAnimationFrame(tick);
+      })(start);
+    }
+
+    function revealCard() {
+      const card = document.getElementById('contact-card');
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      card.classList.add('revealed');
+      card.querySelectorAll('.card-layer').forEach((l, i) => {
+        setTimeout(() => l.classList.add('show'), reduced ? 0 : i * 130);
+      });
+    }
+
+    function closeOverlay() {
+      overlay.style.transition = 'opacity 0.4s ease';
+      overlay.style.opacity = '0';
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        overlay.style.cssText = '';
+        const card = document.getElementById('contact-card');
+        card.classList.remove('revealed');
+        card.querySelectorAll('.card-layer').forEach(l => l.classList.remove('show'));
+        const line = document.getElementById('scan-line');
+        line.classList.remove('scanning');
+        line.style.animation = 'none';
+        requestAnimationFrame(() => { line.style.animation = ''; });
+        document.getElementById('scan-status').classList.remove('visible');
+        document.getElementById('scan-progress').classList.remove('visible');
+        document.getElementById('scan-progress').textContent = '0%';
+      }, 420);
+    }
+
+    document.getElementById('cta-btn').addEventListener('click', function (e) {
+      e.preventDefault();
+      overlay.classList.add('active');
+
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduced) { revealCard(); return; }
+
+      const statusEl   = document.getElementById('scan-status');
+      const progressEl = document.getElementById('scan-progress');
+      const scanLine   = document.getElementById('scan-line');
+
+      setTimeout(() => {
+        statusEl.textContent = 'INITIALIZING SCAN';
+        statusEl.classList.add('visible');
+      }, 250);
+
+      setTimeout(() => {
+        progressEl.classList.add('visible');
+        scanLine.classList.add('scanning');
+        animateProgress(progressEl, 950);
+        playShutter();
+      }, 550);
+
+      setTimeout(() => { statusEl.textContent = 'SCAN COMPLETE  ✓'; }, 1550);
+
+      setTimeout(() => {
+        statusEl.classList.remove('visible');
+        progressEl.classList.remove('visible');
+        revealCard();
+      }, 1900);
+    });
+
+    document.getElementById('scan-close').addEventListener('click', closeOverlay);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && overlay.classList.contains('active')) closeOverlay();
+    });
+  })();
+  </script>
+</body>
+</html>
