@@ -1,0 +1,435 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+KR:wght@300;400;700&display=swap');
+
+:root {
+    --bg-dark: #0a0a0c;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --neon-blue: #00f2ff;
+    --neon-purple: #bc00ff;
+    --text-main: #ffffff;
+    --text-dim: #a0a0a0;
+    --accent-gradient: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 30%, rgba(0, 242, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(188, 0, 255, 0.05) 0%, transparent 40%);
+    z-index: -1;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Header */
+header {
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.logo span {
+    color: var(--neon-blue);
+}
+
+.status-badge {
+    background: var(--accent-gradient);
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Hero Section */
+.hero {
+    padding: 8rem 0;
+    display: flex;
+    align-items: center;
+}
+
+.hero .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4rem;
+}
+
+.hero-content {
+    flex: 1;
+}
+
+.hero h1 {
+    font-size: 4.5rem;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+}
+
+.hero h1 span {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: var(--text-dim);
+    margin-bottom: 2.5rem;
+    max-width: 500px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.btn {
+    padding: 1rem 2.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--accent-gradient);
+    color: white;
+    box-shadow: 0 10px 20px rgba(0, 242, 255, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 242, 255, 0.4);
+}
+
+.btn-secondary {
+    border: 1px solid var(--glass-border);
+    color: white;
+    backdrop-filter: blur(5px);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.hero-viewer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.viewer-container {
+    width: 100%;
+    height: 500px;
+    padding: 2rem;
+    position: relative;
+    border-radius: 24px;
+}
+
+model-viewer {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    --poster-color: transparent;
+}
+
+.ar-button {
+    background: white;
+    border-radius: 8px;
+    border: none;
+    padding: 10px 20px;
+    font-weight: 700;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    color: black;
+}
+
+.viewer-label {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+}
+
+/* Glass Card */
+.glass-card {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.glass-card:hover {
+    border-color: rgba(0, 242, 255, 0.3);
+}
+
+/* Gallery Section */
+.gallery {
+    padding: 6rem 0;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.product-card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.product-type {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+}
+
+.product-type.highlight {
+    color: var(--neon-blue);
+}
+
+.image-wrapper {
+    width: 100%;
+    aspect-ratio: 1;
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.product-card:hover .image-wrapper img {
+    transform: scale(1.1);
+}
+
+/* Guide Section */
+.guide-section {
+    padding: 6rem 0;
+}
+
+.big-card {
+    padding: 4rem;
+}
+
+.subtitle {
+    color: var(--text-dim);
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.step {
+    padding: 1.5rem;
+    border-left: 2px solid var(--glass-border);
+}
+
+.step:hover {
+    border-left-color: var(--neon-blue);
+}
+
+.step-num {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--neon-blue);
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* Checklist Section */
+.checklist-section {
+    padding: 6rem 0;
+    background: rgba(255,255,255,0.02);
+}
+
+.checklist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4rem;
+}
+
+.progress-container {
+    width: 300px;
+}
+
+.progress-text {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    text-align: right;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+#progress-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--accent-gradient);
+    transition: width 0.5s ease;
+}
+
+.checklist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3rem;
+}
+
+.checklist-group h3 {
+    margin-bottom: 1.5rem;
+    color: var(--neon-blue);
+    font-size: 1.3rem;
+}
+
+.check-item {
+    display: block;
+    position: relative;
+    padding-left: 45px;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    font-size: 1.1rem;
+    user-select: none;
+    color: var(--text-dim);
+    transition: color 0.3s ease;
+}
+
+.check-item:hover {
+    color: white;
+}
+
+.check-item input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 28px;
+    width: 28px;
+    background-color: rgba(255,255,255,0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+}
+
+.check-item:hover input ~ .checkmark {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.check-item input:checked ~ .checkmark {
+    background: var(--accent-gradient);
+    border: none;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.check-item input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.check-item .checkmark:after {
+    left: 10px;
+    top: 5px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .hero .container {
+        flex-direction: column;
+        text-align: center;
+    }
+    .hero h1 {
+        font-size: 3rem;
+    }
+    .hero p {
+        margin: 0 auto 2.5rem;
+    }
+    .hero-actions {
+        justify-content: center;
+    }
+}

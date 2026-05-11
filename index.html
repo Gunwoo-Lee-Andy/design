@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>유튜브 쇼핑 3D/AR 가이드 | 아티스트 전용</title>
+    <meta name="description" content="아티스트를 위한 유튜브 쇼핑 3D 제품 전시 및 AR 연동 가이드">
+    <link rel="stylesheet" href="index.css">
+    <!-- Google Model Viewer -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">HUASHU <span>DESIGN</span></div>
+                <div class="status-badge">Artist Beta 2026</div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section: 3D/AR Priority -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Premium 3D & AR<br><span>YouTube Shopping</span></h1>
+                    <p>아티스트의 피규어 제품을 3D로 전시하고,<br>팬들이 자신의 공간에서 AR로 경험하게 하세요.</p>
+                    <div class="hero-actions">
+                        <a href="#checklist" class="btn btn-primary">시작하기</a>
+                        <a href="#merchant-guide" class="btn btn-secondary">연동 가이드</a>
+                    </div>
+                </div>
+                <div class="hero-viewer">
+                    <div class="glass-card viewer-container">
+                        <model-viewer 
+                            id="figure-viewer"
+                            src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
+                            poster="/Users/andy/.gemini/antigravity/brain/c671ad1b-acff-4b3d-a821-599f98b0633d/premium_figure_poster_1778486379327.png"
+                            alt="Artist Figure 3D Model"
+                            ar ar-modes="webxr scene-viewer quick-look" 
+                            camera-controls 
+                            enable-pan
+                            shadow-intensity="1"
+                            auto-rotate
+                            exposure="0.8">
+                            <button slot="ar-button" class="ar-button">
+                                <span class="icon">📱</span> 내 공간에 배치하기
+                            </button>
+                        </model-viewer>
+                        <div class="viewer-label">Figure Concept 01 (3D/AR)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Gallery: 2D vs 3D -->
+        <section class="gallery">
+            <div class="container">
+                <h2 class="section-title">Product Type Mapping</h2>
+                <div class="grid">
+                    <!-- 2D Lightstick -->
+                    <div class="glass-card product-card" data-aos="fade-up">
+                        <div class="product-type">2D PRODUCT</div>
+                        <div class="image-wrapper">
+                            <img src="/Users/andy/.gemini/antigravity/brain/c671ad1b-acff-4b3d-a821-599f98b0633d/premium_lightstick_2d_1778486331543.png" alt="Premium Lightstick">
+                        </div>
+                        <div class="product-info">
+                            <h3>Official Lightstick</h3>
+                            <p>프리미엄 2D 화보 이미지 연동</p>
+                        </div>
+                    </div>
+
+                    <!-- 2D Hoodie -->
+                    <div class="glass-card product-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="product-type">2D PRODUCT</div>
+                        <div class="image-wrapper">
+                            <img src="/Users/andy/.gemini/antigravity/brain/c671ad1b-acff-4b3d-a821-599f98b0633d/premium_hoodie_2d_1778486352051.png" alt="Artist Hoodie">
+                        </div>
+                        <div class="product-info">
+                            <h3>Artist Tour Hoodie</h3>
+                            <p>스트릿 웨어 룩북 이미지 연동</p>
+                        </div>
+                    </div>
+
+                    <!-- 3D Figure -->
+                    <div class="glass-card product-card active" data-aos="fade-up" data-aos-delay="200">
+                        <div class="product-type highlight">3D/AR PRODUCT</div>
+                        <div class="image-wrapper">
+                             <img src="/Users/andy/.gemini/antigravity/brain/c671ad1b-acff-4b3d-a821-599f98b0633d/premium_figure_poster_1778486379327.png" alt="Figure Model">
+                        </div>
+                        <div class="product-info">
+                            <h3>Artist Figure v1</h3>
+                            <p>GLB 기반 AR 실시간 체험 연동</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Merchant Center Guide -->
+        <section id="merchant-guide" class="guide-section">
+            <div class="container">
+                <div class="glass-card big-card">
+                    <h2 class="section-title">Google Merchant Center AR 연동 가이드</h2>
+                    <p class="subtitle">피규어 제품을 유튜브 쇼핑에서 AR로 보여주기 위한 필수 설정입니다.</p>
+                    
+                    <div class="steps-grid">
+                        <div class="step">
+                            <div class="step-num">01</div>
+                            <h4>3D 에셋 준비</h4>
+                            <p>피규어의 3D 모델을 <strong>.glb</strong> 형식으로 제작합니다. (최대 15MB 권장)</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">02</div>
+                            <h4>공공 URL 업로드</h4>
+                            <p>제작된 파일을 웹 서버나 클라우드에 업로드하고 <strong>직접 접근 가능한 URL</strong>을 생성합니다.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">03</div>
+                            <h4>속성 추가</h4>
+                            <p>머천트 센터 피드에서 <code>virtual_model_link</code> 속성에 해당 URL을 입력합니다.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">04</div>
+                            <h4>유튜브 연동</h4>
+                            <p>유튜브 스튜디오의 '수익 창출' 탭에서 제품을 태그하면 자동으로 AR 뷰어가 활성화됩니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Checklist -->
+        <section id="checklist" class="checklist-section">
+            <div class="container">
+                <div class="checklist-header">
+                    <h2>Artist Preparation Checklist</h2>
+                    <div class="progress-container">
+                        <div class="progress-text">완료율: <span id="progress-val">0</span>%</div>
+                        <div class="progress-bar"><div id="progress-fill"></div></div>
+                    </div>
+                </div>
+
+                <div class="checklist-grid">
+                    <div class="checklist-group">
+                        <h3>1. 채널 자격 요건</h3>
+                        <label class="check-item">
+                            <input type="checkbox" data-weight="25">
+                            <span class="checkmark"></span>
+                            유튜브 파트너 프로그램(YPP) 가입 완료
+                        </label>
+                        <label class="check-item">
+                            <input type="checkbox" data-weight="25">
+                            <span class="checkmark"></span>
+                            공식 아티스트 채널(OAC) 상태 확인
+                        </label>
+                    </div>
+
+                    <div class="checklist-group">
+                        <h3>2. 제품 에셋 (2D/3D)</h3>
+                        <label class="check-item">
+                            <input type="checkbox" data-weight="10">
+                            <span class="checkmark"></span>
+                            응원봉/후디 고화질 2D 이미지 (PNG/JPG)
+                        </label>
+                        <label class="check-item">
+                            <input type="checkbox" data-weight="20">
+                            <span class="checkmark"></span>
+                            피규어용 3D GLB 모델 파일 제작
+                        </label>
+                    </div>
+
+                    <div class="checklist-group">
+                        <h3>3. 플랫폼 및 연동</h3>
+                        <label class="check-item">
+                            <input type="checkbox" data-weight="10">
+                            <span class="checkmark"></span>
+                            쇼피파이(Shopify) 등 지원 상점 연결
+                        </label>
+                        <label class="check-item">
+                            <input type="checkbox" data-weight="10">
+                            <span class="checkmark"></span>
+                            구글 머천트 센터 AR 속성 입력 완료
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 HUASHU DESIGN. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="index.js"></script>
+</body>
+</html>
